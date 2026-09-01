@@ -66,12 +66,12 @@ public class Sobre extends JDialog {
 		getContentPane().add(lblVersao);
 		
 		JLabel lblMit = new JLabel("");
-		lblMit.setIcon(new ImageIcon(Sobre.class.getResource("/img/mit.png")));
+		//lblMit.setIcon(new ImageIcon(Sobre.class.getResource("")));
 		lblMit.setBounds(340, 21, 64, 64);
 		getContentPane().add(lblMit);
 		
 		JLabel lblGithub = new JLabel("");
-		lblGithub.setIcon(new ImageIcon(Sobre.class.getResource("/img/github.png")));
+		//lblGithub.setIcon(new ImageIcon(Sobre.class.getResource("/img/github.png")));
 		lblGithub.setBounds(26, 180, 32, 32);
 		getContentPane().add(lblGithub);
 		
