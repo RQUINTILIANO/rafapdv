@@ -170,9 +170,12 @@ public class Main extends JFrame {
 		lblSeparador.setBounds(75, 652, 177, 14);
 		panelLateral.add(lblSeparador);
 		
+		//Chamar um formulário
 				JButton btnClientes = new JButton("CLIENTES");
 				btnClientes.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						frmCliente cliente = new frmCliente();
+						cliente.setVisible(true);
 					}
 				});
 				btnClientes.setBounds(34, 230, 254, 75);
@@ -212,7 +215,7 @@ public class Main extends JFrame {
 
 		JPanel panelTabela = new JPanel();
 		panelTabela.setBackground(SystemColor.window);
-		panelTabela.setBounds(334, 490, 940, 211);
+		panelTabela.setBounds(334, 490, 940, 174);
 		contentPane.add(panelTabela);
 		panelTabela.setLayout(null);
 
@@ -239,11 +242,11 @@ public class Main extends JFrame {
 		contentPane.add(lblData);
 
 		JSeparator separatorInferior = new JSeparator();
-		separatorInferior.setBounds(352, 712, 800, 2);
+		separatorInferior.setBounds(344, 675, 800, 2);
 		contentPane.add(separatorInferior);
 
 		JSeparator separatorSuperior = new JSeparator();
-		separatorSuperior.setBounds(-16, -1, 800, 2);
+		separatorSuperior.setBounds(364, 101, 800, 2);
 		contentPane.add(separatorSuperior);
 
 		JLabel lblDatabase = new JLabel("");
@@ -260,7 +263,7 @@ public class Main extends JFrame {
 		lblStatus = new JLabel("●");
 		lblStatus.setForeground(Color.RED);
 		lblStatus.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblStatus.setBounds(565, 734, 16, 16);
+		lblStatus.setBounds(527, 713, 16, 16);
 		contentPane.add(lblStatus);
 		
 		JPanel panelCard4_1 = new JPanel();
@@ -304,6 +307,12 @@ public class Main extends JFrame {
 		lblCalendario_1.setIcon(new ImageIcon(Main.class.getResource("/img/DASHBOARD.png")));
 		lblCalendario_1.setBounds(354, 24, 64, 66);
 		contentPane.add(lblCalendario_1);
+		
+		JLabel lblMysql_1 = new JLabel("MySQL conectado");
+		lblMysql_1.setForeground(UIManager.getColor("Button.darkShadow"));
+		lblMysql_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblMysql_1.setBounds(415, 715, 130, 14);
+		contentPane.add(lblMysql_1);
 
 		// iniciar centralizado
 		setLocationRelativeTo(null);
