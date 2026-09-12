@@ -126,7 +126,7 @@ public class frmFornecedor extends JDialog {
 					fornecedor.setEmail(txtEmail.getText());
 					fornecedor.setSite(txtSite.getText());
 					// Enviar o objeto para o controller
-					controller.adicionar(fornecedor);
+					controller.Adicionar(fornecedor);
 					// Mensagem de confirmação
 					JOptionPane.showMessageDialog(null, "Fornecedor adicionado com sucesso.");
 					// Limpar campos
@@ -148,7 +148,7 @@ public class frmFornecedor extends JDialog {
 		// CRUD Update - Editar fornecedor ======================
 		// ======================================================
 		btnEditar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {	
 				// validação de campos obrigatórios
 				if (txtNome.getText().isBlank()) {
 					JOptionPane.showMessageDialog(null, "Preencha o nome do fornecedor");
@@ -159,6 +159,7 @@ public class frmFornecedor extends JDialog {
 				} else {
 					// lógica principal se os os campos obrigatórios estiverem preenchidos
 					// Transferir os dados da tela para o Model
+					try {
 					fornecedor.setIdFornecedor(Integer.parseInt(txtID.getText()));
 					fornecedor.setNome(txtNome.getText());
 					fornecedor.setFone(txtFone.getText());
@@ -166,16 +167,22 @@ public class frmFornecedor extends JDialog {
 					fornecedor.setSite(txtSite.getText());
 					
 					// Enviar o objeto para o Controller
-					controller.editarFornecedor(fornecedor);
+					controller.Editar(fornecedor);
 
 					// Mensagem para o usuário
 					JOptionPane.showMessageDialog(null, "Dados do fornecedor alterados");
 
 					// limpar campos
-					limparCampos();
+					limparCampos(); 
+				} catch (Exception e2) {
+					System.out.println(e2);
+					return;
 				}
 			}
-		});
+			}
+			});
+		
+		
 		// ======================================================
 
 		btnEditar.setBounds(108, 334, 64, 64);
@@ -203,7 +210,7 @@ public class frmFornecedor extends JDialog {
 							"Atenção!", JOptionPane.YES_OPTION);
 					if (resposta == JOptionPane.YES_OPTION) {
 						// excluir através do controller
-						controller.excluir(idFornecedor);
+						controller.Excluir(idFornecedor);
 						// limpar os campos
 						limparCampos();
 						// mensagem para o usuário
@@ -222,7 +229,7 @@ public class frmFornecedor extends JDialog {
 		// Gerar relatório de fornecedores ======================
 		btnRelatorio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.gerarRelatorioFornecedores();
+				//controller.gerarRelatorioFornecedores();
 			}
 		});
 		// ======================================================
@@ -353,3 +360,4 @@ public class frmFornecedor extends JDialog {
 		}
 	}
 }
+

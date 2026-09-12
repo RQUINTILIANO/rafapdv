@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -42,7 +43,6 @@ public class frmProduto extends JDialog {
 	private JTextField txtEstoqueMinimo;
 	private JTextField txtCategoria;
 	private JComboBox<String>cboFornecedor;
-	
 
 	/**
 	 * Launch the application.
@@ -65,6 +65,9 @@ public class frmProduto extends JDialog {
 	 * Create the dialog.
 	 */
 	public frmProduto() {
+		
+		fornecedor = new Fornecedor();
+		
 		setModal(true);
 		setResizable(false);
 		setTitle("Produtos");
@@ -227,7 +230,7 @@ public class frmProduto extends JDialog {
 		getContentPane().add(lblNewLabel_11);
 		
 		//Executar o metodo para carregar o ID dos fornecedores
-		carregarFornecedores();
+		carregarFornecedor();
 	
 
 	}// fim do construtor
@@ -235,17 +238,18 @@ public class frmProduto extends JDialog {
 	//=================================================
 	//preencher o como box com a lista de fornecedores 
 	//=================================================
-	 private void carregarFornecedores(); {
+	 private void carregarFornecedor(){
 		 //limpar o como box
 		 cboFornecedor.removeAllItems();
 		 //Opção padrão
 		 cboFornecedor.addItem("selecione");
 		 //Executar o método para buscar a lista de fornecedores(array)
-		 Array<Fornecedor> lista = controllerFornecedor.listaFornecedores();
+		 ArrayList<Fornecedor> lista = controllerFornecedor.listaFornecedores();
 		 //Percorrer o vetor e adicionar os fornecedores ao comobox
 		 for (Fornecedor fornecedor : lista) {
-	     //Exibir o ID e nome do fornecedor no comobox
-		 cbo.Fornecedor.addItem(fornecedor.getIdFornecedor() + " - " + fornecedor.getNome());
+	     Object cbo;
+		 //Exibir o ID e nome do fornecedor no comobox
+		 cboFornecedor.addItem(fornecedor.getIdFornecedor() + " - " + fornecedor.getNome());
 		 }
 	 }
 	//=================================================
