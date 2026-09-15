@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 public class Database {
 	// informações do banco de dados
 	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://localhost:3306/quintpdv";
+	private String url = "jdbc:mysql://localhost:3306/dbjapdv";
 	private String user = "root";
 	private String password = "";
 	

@@ -17,13 +17,9 @@ import controller.FornecedorController;
 // importar o modelo de dados
 import model.Fornecedor;
 import utils.Validador;
-import javax.swing.JPanel;
-import java.awt.SystemColor;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
+import java.awt.Cursor;
+import javax.swing.SwingConstants;
 
 public class frmFornecedor extends JDialog {
 
@@ -33,6 +29,7 @@ public class frmFornecedor extends JDialog {
 	private JTextField txtEmail;
 	private JTextField txtID;
 	private JTextField txtSite;
+	private JButton btnAdicionar;
 
 	/**
 	 * Launch the application.
@@ -57,7 +54,7 @@ public class frmFornecedor extends JDialog {
 	public frmFornecedor() {
 		setResizable(false);
 		setTitle("Fornecedores");
-		setBounds(100, 100, 800, 500);
+		setBounds(100, 100, 640, 480);
 
 		// criar o objeto controller
 		// controller = new FornecedorController(); //sintaxe moderna
@@ -70,50 +67,185 @@ public class frmFornecedor extends JDialog {
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 
-		JLabel lblNome = new JLabel("Nome");
-		lblNome.setForeground(new Color(32, 178, 170));
-		lblNome.setBounds(52, 132, 46, 14);
-		getContentPane().add(lblNome);
+		JLabel lblNewLabel = new JLabel("Nome");
+		lblNewLabel.setBounds(53, 101, 46, 14);
+		getContentPane().add(lblNewLabel);
 
-		JLabel lblFone = new JLabel("Fone");
-		lblFone.setForeground(new Color(32, 178, 170));
-		lblFone.setBounds(52, 249, 46, 14);
-		getContentPane().add(lblFone);
+		JLabel lblNewLabel_1 = new JLabel("Fone");
+		lblNewLabel_1.setBounds(55, 155, 46, 14);
+		getContentPane().add(lblNewLabel_1);
 
-		JLabel lblemail = new JLabel("E-mail");
-		lblemail.setForeground(new Color(32, 178, 170));
-		lblemail.setBounds(52, 191, 46, 14);
-		getContentPane().add(lblemail);
+		JLabel lblNewLabel_2 = new JLabel("E-mail");
+		lblNewLabel_2.setBounds(53, 208, 46, 14);
+		getContentPane().add(lblNewLabel_2);
 
 		txtNome = new JTextField();
-		txtNome.setBounds(112, 125, 459, 28);
+		txtNome.setBounds(109, 95, 352, 28);
 		getContentPane().add(txtNome);
 		txtNome.setColumns(10);
 		// validação do número máximo de caracteres
 		txtNome.setDocument(new Validador(50));
 
 		txtFone = new JTextField();
-		txtFone.setBounds(112, 184, 208, 28);
+		txtFone.setBounds(109, 148, 208, 28);
 		getContentPane().add(txtFone);
 		txtFone.setColumns(10);
 		// validação do número máximo de caracteres
 		txtFone.setDocument(new Validador(20));
 
 		txtEmail = new JTextField();
-		txtEmail.setBounds(112, 242, 459, 28);
+		txtEmail.setBounds(109, 200, 459, 28);
 		getContentPane().add(txtEmail);
 		txtEmail.setColumns(10);
 		// validação do número máximo de caracteres
 		txtEmail.setDocument(new Validador(50));
 
+		btnAdicionar = new JButton("");
+		btnAdicionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAdicionar.setToolTipText("Adicionar");
+		btnAdicionar.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/create.png")));
+
+		// ======================================================
+		// CRUD Create - Cadastrar fornecedor ===================
+		// ======================================================
+		btnAdicionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// validação de campos obrigatórios
+				if (txtNome.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Preencha o nome do fornecedor");
+					txtNome.requestFocus();
+				} else if (txtFone.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Preencha o telefone do fornecedor");
+					txtFone.requestFocus();
+				} else {
+					// lógica principal se os os campos obrigatórios estiverem preenchidos
+
+					// Transferir os dados da tela para o objeto
+					fornecedor.setNome(txtNome.getText());
+					fornecedor.setFone(txtFone.getText());
+					fornecedor.setEmail(txtEmail.getText());
+					fornecedor.setSite(txtSite.getText());
+					// Enviar o objeto para o controller
+					controller.adicionar(fornecedor);
+					// Mensagem de confirmação
+					JOptionPane.showMessageDialog(null, "Fornecedor adicionado com sucesso.");
+					// Limpar campos
+					limparCampos();
+				}
+			}
+		});
+		// Fim - CRUD Create ====================================
+
+		btnAdicionar.setBounds(36, 334, 64, 64);
+		getContentPane().add(btnAdicionar);
+
+		JButton btnEditar = new JButton("");
+		btnEditar.setToolTipText("Editar");
+		btnEditar.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/update.png")));
+		btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+		// ======================================================
+		// CRUD Update - Editar fornecedor ======================
+		// ======================================================
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// validação de campos obrigatórios
+				if (txtNome.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Preencha o nome do fornecedor");
+					txtNome.requestFocus();
+				} else if (txtFone.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Preencha o telefone do fornecedor");
+					txtFone.requestFocus();
+				} else {
+					// lógica principal se os os campos obrigatórios estiverem preenchidos
+					// Transferir os dados da tela para o Model
+					fornecedor.setIdFornecedor(Integer.parseInt(txtID.getText()));
+					fornecedor.setNome(txtNome.getText());
+					fornecedor.setFone(txtFone.getText());
+					fornecedor.setEmail(txtEmail.getText());
+					fornecedor.setSite(txtSite.getText());
+					
+					// Enviar o objeto para o Controller
+					controller.editarFornecedor(fornecedor);
+
+					// Mensagem para o usuário
+					JOptionPane.showMessageDialog(null, "Dados do fornecedor alterados");
+
+					// limpar campos
+					limparCampos();
+				}
+			}
+		});
+		// ======================================================
+
+		btnEditar.setBounds(108, 334, 64, 64);
+		getContentPane().add(btnEditar);
+		JButton btnExcluir = new JButton("");
+		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnExcluir.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/delete.png")));
+		btnExcluir.setToolTipText("Excluir");
+
+		// ======================================================
+		// CRUD Delete - Excluir fornecedor =====================
+		// ======================================================
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// validação
+				if (txtNome.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Digite o nome do fornecedor");
+					txtNome.requestFocus();
+				} else {
+					// capturar o id do fornecedor
+					int idFornecedor = Integer.parseInt(txtID.getText());
+
+					// confirmação de exclusão
+					int resposta = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir\neste fornecedor?",
+							"Atenção!", JOptionPane.YES_OPTION);
+					if (resposta == JOptionPane.YES_OPTION) {
+						// excluir através do controller
+						controller.excluir(idFornecedor);
+						// limpar os campos
+						limparCampos();
+						// mensagem para o usuário
+						JOptionPane.showMessageDialog(null, "Fornecedor excluído com sucesso.");
+					}
+				}
+			}
+		});
+		// ======================================================
+
+		btnExcluir.setBounds(181, 334, 64, 64);
+		getContentPane().add(btnExcluir);
+
+		JButton btnRelatorio = new JButton("");
+		
+		// Gerar relatório de fornecedores ======================
+		btnRelatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.gerarRelatorioFornecedores();
+			}
+		});
+		// ======================================================
+		btnRelatorio.setToolTipText("Gerar relatório");
+		btnRelatorio.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/pdf_forn.png")));
+		btnRelatorio.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRelatorio.setBounds(274, 334, 64, 64);
+		getContentPane().add(btnRelatorio);
+
+		JLabel lblNewLabel_3 = new JLabel("ID");
+		lblNewLabel_3.setBounds(53, 54, 46, 14);
+		getContentPane().add(lblNewLabel_3);
+
 		txtID = new JTextField();
 		txtID.setEnabled(false);
-		txtID.setBounds(688, 345, 86, 20);
+		txtID.setBounds(109, 51, 86, 20);
 		getContentPane().add(txtID);
 		txtID.setColumns(10);
-		txtID.setVisible(false);
 
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setIconTextGap(8);
+		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
+		btnBuscar.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/search.png")));
 
 		// ==================================================
 		// CRUD Read - Buscar fornecedor
@@ -139,26 +271,27 @@ public class frmFornecedor extends JDialog {
 						txtFone.setText(fornecedor.getFone());
 						txtEmail.setText(fornecedor.getEmail());
 						txtSite.setText(fornecedor.getSite());
+						// desativar o botão adicionar
+						btnAdicionar.setEnabled(false);
 
 					} else {
 						JOptionPane.showMessageDialog(null, "Fornecedor não cadastrado");
 						limparCampos();
 					}
 				}
-			}
+			}		
 		});
 		// Fim CRUD Read ====================================
 
-		btnBuscar.setBounds(591, 128, 89, 23);
+		btnBuscar.setBounds(478, 93, 100, 30);
 		getContentPane().add(btnBuscar);
 
-		JLabel lblsite = new JLabel("Site");
-		lblsite.setForeground(new Color(32, 178, 170));
-		lblsite.setBounds(56, 305, 46, 14);
-		getContentPane().add(lblsite);
+		JLabel lblNewLabel_4 = new JLabel("Site");
+		lblNewLabel_4.setBounds(65, 259, 46, 14);
+		getContentPane().add(lblNewLabel_4);
 
 		txtSite = new JTextField();
-		txtSite.setBounds(112, 298, 352, 28);
+		txtSite.setBounds(109, 252, 352, 28);
 		getContentPane().add(txtSite);
 		txtSite.setColumns(10);
 
@@ -175,72 +308,17 @@ public class frmFornecedor extends JDialog {
 		});
 		// ==============================================
 		
-		btnAcessar.setBounds(487, 301, 89, 23);
+		btnAcessar.setBounds(471, 254, 71, 25);
 		getContentPane().add(btnAcessar);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setForeground(new Color(220, 220, 220));
-		panel_1.setBackground(SystemColor.scrollbar);
-		panel_1.setBounds(0, 376, 784, 85);
-		getContentPane().add(panel_1);
+		JLabel lblNewLabel_5 = new JLabel("");
+		lblNewLabel_5.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/supliers.png")));
+		lblNewLabel_5.setBounds(489, 319, 113, 96);
+		getContentPane().add(lblNewLabel_5);
 		
-		JButton btnAdicionar = new JButton("ADICIONAR");
-		btnAdicionar.setIconTextGap(12);
-		btnAdicionar.setHorizontalAlignment(SwingConstants.LEFT);
-		btnAdicionar.setForeground(Color.WHITE);
-		btnAdicionar.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnAdicionar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAdicionar.setBorderPainted(false);
-		btnAdicionar.setBackground(new Color(32, 178, 170));
-		btnAdicionar.setBounds(48, 26, 137, 43);
-		panel_1.add(btnAdicionar);
+		//Definir um botão padrão (Associar o Enter a este botão)
+		getRootPane().setDefaultButton(btnBuscar);		
 		
-		JButton btnEditar = new JButton("EDITAR");
-		btnEditar.setIconTextGap(12);
-		btnEditar.setForeground(Color.WHITE);
-		btnEditar.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnEditar.setBorderPainted(false);
-		btnEditar.setBackground(new Color(32, 178, 170));
-		btnEditar.setBounds(237, 26, 129, 43);
-		panel_1.add(btnEditar);
-		
-		JButton btnExcluir = new JButton("EXCLUIR");
-		btnExcluir.setIconTextGap(12);
-		btnExcluir.setForeground(Color.WHITE);
-		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnExcluir.setBorderPainted(false);
-		btnExcluir.setBackground(new Color(32, 178, 170));
-		btnExcluir.setBounds(429, 26, 129, 43);
-		panel_1.add(btnExcluir);
-		
-		JButton btnRelatorio = new JButton("RELATÓRIO");
-		btnRelatorio.setBounds(601, 26, 129, 43);
-		panel_1.add(btnRelatorio);
-		btnRelatorio.setIconTextGap(12);
-		btnRelatorio.setForeground(Color.WHITE);
-		btnRelatorio.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnRelatorio.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnRelatorio.setBorderPainted(false);
-		btnRelatorio.setBackground(new Color(32, 178, 170));
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBackground(new Color(32, 178, 170));
-		panel.setBounds(0, 0, 784, 76);
-		getContentPane().add(panel);
-		
-		JLabel lblCentralFornecedores = new JLabel("Central Fornecedores");
-		lblCentralFornecedores.setToolTipText("");
-		lblCentralFornecedores.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/CLIENTES.png")));
-		lblCentralFornecedores.setForeground(SystemColor.textHighlightText);
-		lblCentralFornecedores.setFont(new Font("Tahoma", Font.BOLD, 38));
-		lblCentralFornecedores.setBackground(Color.WHITE);
-		lblCentralFornecedores.setBounds(39, 11, 513, 46);
-		panel.add(lblCentralFornecedores);
-
 	} // fim do construtor
 
 	// ==================================================
@@ -253,7 +331,7 @@ public class frmFornecedor extends JDialog {
 		txtEmail.setText(null);
 		txtSite.setText(null);
 		txtNome.requestFocus(); // posicionar o cursor no nome
-		
+		btnAdicionar.setEnabled(true);
 	}
 
 	// ==================================================
@@ -270,8 +348,8 @@ public class frmFornecedor extends JDialog {
 			// abrir o link no navegador padrão do cliente
 			desktop.browse(uri);
 		} catch (Exception e) {
-			System.out.println(e);
+			JOptionPane.showMessageDialog(null, "Digite um formato válido de site\nExemplo: https://www.joseassis.com.br");
+			txtSite.requestFocus();
 		}
 	}
-
 }
