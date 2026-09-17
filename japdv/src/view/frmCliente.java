@@ -1,34 +1,36 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Font;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import javax.swing.ImageIcon;
-import java.awt.Cursor;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.SystemColor;
+import javax.swing.border.EmptyBorder;
+
+import controller.ClienteController;
+import model.Cliente;
 
 public class frmCliente extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_6;
+	private JTextField txtNome;
+	private JTextField txtEmail;
+	private JTextField txtContato;
+	private JTextField txtEndereco;
+	private JTextField txtCEP;
 	private JTextField textField_7;
 	private JTextField textField_8;
 
@@ -49,6 +51,13 @@ public class frmCliente extends JDialog {
 	 * Create the dialog.
 	 */
 	public frmCliente() {
+		
+		ClienteController controller = new ClienteController();
+
+		// Criar o objeto fornecedor
+		Cliente cliente = new Cliente();
+
+		
 		setBounds(100, 100, 800, 500);
 		getContentPane().setLayout(null);
 		contentPanel.setForeground(Color.ORANGE);
@@ -62,30 +71,30 @@ public class frmCliente extends JDialog {
 		contentPanel.add(textField);
 		textField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(100, 140, 488, 30);
-		contentPanel.add(textField_1);
+		txtNome = new JTextField();
+		txtNome.setColumns(10);
+		txtNome.setBounds(100, 140, 488, 30);
+		contentPanel.add(txtNome);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(100, 181, 279, 30);
-		contentPanel.add(textField_2);
+		txtEmail = new JTextField();
+		txtEmail.setColumns(10);
+		txtEmail.setBounds(100, 181, 279, 30);
+		contentPanel.add(txtEmail);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(452, 181, 279, 30);
-		contentPanel.add(textField_3);
+		txtContato = new JTextField();
+		txtContato.setColumns(10);
+		txtContato.setBounds(452, 181, 279, 30);
+		contentPanel.add(txtContato);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(100, 237, 631, 30);
-		contentPanel.add(textField_4);
+		txtEndereco = new JTextField();
+		txtEndereco.setColumns(10);
+		txtEndereco.setBounds(100, 237, 631, 30);
+		contentPanel.add(txtEndereco);
 		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(100, 278, 279, 30);
-		contentPanel.add(textField_6);
+		txtCEP = new JTextField();
+		txtCEP.setColumns(10);
+		txtCEP.setBounds(100, 278, 279, 30);
+		contentPanel.add(txtCEP);
 		
 		textField_7 = new JTextField();
 		textField_7.setColumns(10);
@@ -192,6 +201,31 @@ public class frmCliente extends JDialog {
 		btnAdicionar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnAdicionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				// validação de campos obrigatórios
+				if (txtNome.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Preencha o nome do fornecedor");
+					txtNome.requestFocus();
+				} else if (txtContato.getText().isBlank()) {
+					JOptionPane.showMessageDialog(null, "Preencha o telefone do fornecedor");
+					txtContato.requestFocus();
+				} else {
+					// lógica principal se os os campos obrigatórios estiverem preenchidos
+
+					// Transferir os dados da tela para o objeto
+					cliente.setNome(txtNome.getText());
+					cliente.setCpf(txtCEP.getText());
+					cliente.setContato(txtContato.getText());
+					cliente.setEmail(txtEmail.getText());
+					
+					cliente.setEndereco(txtEndereco.getText());
+					// Enviar o objeto para o controller
+					controller.Adicionar(cliente);
+					// Mensagem de confirmação
+					JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso.");
+					// Limpar campos
+					limparCampos();
+				}	
 			}
 		});
 		btnAdicionar.setIconTextGap(12);
@@ -240,4 +274,20 @@ public class frmCliente extends JDialog {
 		contentPanel.add(lblNewLabel);
 		lblNewLabel.setIcon(new ImageIcon(frmCliente.class.getResource("/img/LOGO2.png")));
 	}
+	
+	// ==================================================
+	// Limpar campos ====================================
+	// ==================================================
+	void limparCampos() {
+		//txtID.setText(null);
+		txtNome.setText(null);
+		txtEndereco.setText(null);
+		txtEmail.setText(null);
+		txtContato.setText(null);
+		txtCEP.setText(null);
+		txtNome.requestFocus(); // posicionar o cursor no nome
+		//btnAdicionar.setEnabled(true);
+	}
+
+	
 }
