@@ -1,31 +1,32 @@
 package view;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.ImageIcon;
+import java.awt.Cursor;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.UIManager;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
-import java.awt.Cursor;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+
+import com.formdev.flatlaf.FlatLightLaf;
 
 //importar a classe Database do pacote database
 import database.Database;
+import model.Cliente;
 
 public class Main extends JFrame {
 
@@ -81,7 +82,7 @@ public class Main extends JFrame {
 		lblSistema.setBackground(UIManager.getColor("CheckBox.darkShadow"));
 		lblSistema.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblSistema.setForeground(UIManager.getColor("CheckBox.darkShadow"));
-		lblSistema.setBounds(81, 126, 91, 14);
+		lblSistema.setBounds(84, 106, 91, 14);
 		panelLateral.add(lblSistema);
 
 		JButton btnFornecedores = new JButton("FORNECEDORES");
@@ -99,7 +100,7 @@ public class Main extends JFrame {
 		btnFornecedores.setFont(new Font("Arial Narrow", Font.BOLD, 17));
 		btnFornecedores.setHorizontalAlignment(SwingConstants.LEFT);
 		btnFornecedores.setIcon(new ImageIcon(Main.class.getResource("/img/FORNECEDORES.png")));
-		btnFornecedores.setBounds(21, 151, 235, 81);
+		btnFornecedores.setBounds(21, 131, 235, 67);
 		panelLateral.add(btnFornecedores);
 
 		JButton btnProdutos = new JButton("PRODUTOS");
@@ -117,10 +118,14 @@ public class Main extends JFrame {
 		btnProdutos.setForeground(Color.WHITE);
 		btnProdutos.setFont(new Font("Arial Narrow", Font.BOLD, 17));
 		btnProdutos.setBackground(new Color(32, 178, 170));
-		btnProdutos.setBounds(21, 243, 235, 81);
+		btnProdutos.setBounds(21, 209, 235, 67);
 		panelLateral.add(btnProdutos);
 
 		JButton btnPDV = new JButton("PDV");
+		btnPDV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnPDV.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPDV.setBorderPainted(false);
 		btnPDV.setIconTextGap(12);
@@ -129,7 +134,7 @@ public class Main extends JFrame {
 		btnPDV.setForeground(Color.WHITE);
 		btnPDV.setFont(new Font("Arial Narrow", Font.BOLD, 17));
 		btnPDV.setBackground(new Color(32, 178, 170));
-		btnPDV.setBounds(21, 335, 235, 81);
+		btnPDV.setBounds(21, 443, 235, 67);
 		panelLateral.add(btnPDV);
 
 		JButton btnVendas = new JButton("VENDAS");
@@ -145,7 +150,7 @@ public class Main extends JFrame {
 		btnVendas.setForeground(Color.WHITE);
 		btnVendas.setFont(new Font("Arial Narrow", Font.BOLD, 17));
 		btnVendas.setBackground(new Color(32, 178, 170));
-		btnVendas.setBounds(21, 427, 235, 81);
+		btnVendas.setBounds(21, 365, 235, 67);
 		panelLateral.add(btnVendas);
 
 		JButton btnSair = new JButton("SAIR");
@@ -187,20 +192,45 @@ public class Main extends JFrame {
 		btnSobre.setForeground(Color.WHITE);
 		btnSobre.setFont(new Font("Arial Narrow", Font.BOLD, 17));
 		btnSobre.setBackground(new Color(32, 178, 170));
-		btnSobre.setBounds(21, 519, 235, 81);
+		btnSobre.setBounds(21, 521, 235, 67);
 		panelLateral.add(btnSobre);
 
 		JLabel lblSeparador = new JLabel("------------------------");
 		lblSeparador.setBackground(UIManager.getColor("Button.disabledForeground"));
 		lblSeparador.setForeground(SystemColor.textInactiveText);
 		lblSeparador.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblSeparador.setBounds(45, 605, 177, 14);
+		lblSeparador.setBounds(45, 599, 177, 14);
 		panelLateral.add(lblSeparador);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(71, 15, 119, 112);
+		lblNewLabel.setBounds(74, 0, 119, 112);
 		panelLateral.add(lblNewLabel);
 		lblNewLabel.setIcon(new ImageIcon(Main.class.getResource("/img/LOGO2.png")));
+		
+		JButton btnCliente = new JButton("CLIENTES");
+
+		btnCliente.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+
+		    	frmCliente cliente = new frmCliente();
+		    	cliente.setVisible(true);
+
+		    }
+		});
+		//btnCliente.addActionListener(new ActionListener() {
+			//public void actionPerformed(ActionEvent e) {
+		//	}
+		//});
+		btnCliente.setIconTextGap(12);
+		btnCliente.setIcon(new ImageIcon(Main.class.getResource("/img/CLIENTES.png")));
+		btnCliente.setHorizontalAlignment(SwingConstants.LEFT);
+		btnCliente.setForeground(Color.WHITE);
+		btnCliente.setFont(new Font("Arial Narrow", Font.BOLD, 17));
+		btnCliente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnCliente.setBorderPainted(false);
+		btnCliente.setBackground(new Color(32, 178, 170));
+		btnCliente.setBounds(21, 287, 235, 67);
+		panelLateral.add(btnCliente);
 
 		JPanel panelTabela = new JPanel();
 		panelTabela.setBackground(SystemColor.window);

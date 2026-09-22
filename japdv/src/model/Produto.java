@@ -10,12 +10,16 @@ public class Produto {
 	private int quantidade;
 	private int estoqueMinimo;
 	private int idFornecedor;
+	public int getIdProduto; 
+	
 	public int getIdProduto() {
 		return idProduto;
 	}
+	
 	public void setIdProduto(int idProduto) {
 		this.idProduto = idProduto;
 	}
+	
 	public String getCodigoBarras() {
 		return codigoBarras;
 	}

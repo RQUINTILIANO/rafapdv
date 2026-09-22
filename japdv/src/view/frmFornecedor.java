@@ -208,7 +208,7 @@ public class frmFornecedor extends JDialog {
 		panel.setLayout(null);
 		
 				btnAdicionar = new JButton("ADICIONAR");
-				btnAdicionar.setBounds(39, 16, 156, 62);
+				btnAdicionar.setBounds(81, 16, 156, 62);
 				panel.add(btnAdicionar);
 				btnAdicionar.setBackground(new Color(255, 255, 255));
 				btnAdicionar.setFont(new Font("Arial Narrow", Font.BOLD, 17));
@@ -218,7 +218,7 @@ public class frmFornecedor extends JDialog {
 				
 						JButton btnEditar = new JButton("EDITAR");
 						btnEditar.setFont(new Font("Arial Narrow", Font.BOLD, 17));
-						btnEditar.setBounds(751, 16, 156, 62);
+						btnEditar.setBounds(749, 16, 156, 62);
 						panel.add(btnEditar);
 						btnEditar.setBackground(new Color(255, 255, 255));
 						btnEditar.setForeground(new Color(32, 178, 170));
@@ -235,7 +235,7 @@ public class frmFornecedor extends JDialog {
 						
 								JButton btnRelatorio = new JButton("RELATÓRIO");
 								btnRelatorio.setFont(new Font("Arial Narrow", Font.BOLD, 17));
-								btnRelatorio.setBounds(523, 16, 156, 62);
+								btnRelatorio.setBounds(527, 16, 156, 62);
 								panel.add(btnRelatorio);
 								btnRelatorio.setBackground(new Color(255, 255, 255));
 								btnRelatorio.setForeground(new Color(32, 178, 170));
@@ -258,9 +258,9 @@ public class frmFornecedor extends JDialog {
 								
 								JLabel lblNewLabel_6 = new JLabel("CENTRAL FORNECEDORES");
 								lblNewLabel_6.setIcon(new ImageIcon(frmFornecedor.class.getResource("/img/FORNECEDORES.png")));
-								lblNewLabel_6.setFont(new Font("Arial Narrow", Font.BOLD, 30));
+								lblNewLabel_6.setFont(new Font("Tahoma", Font.BOLD, 30));
 								lblNewLabel_6.setForeground(new Color(255, 255, 255));
-								lblNewLabel_6.setBounds(32, 40, 448, 60);
+								lblNewLabel_6.setBounds(32, 40, 552, 60);
 								panel_1.add(lblNewLabel_6);
 								
 								JLabel lblNewLabel_5 = new JLabel("");

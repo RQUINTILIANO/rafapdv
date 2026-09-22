@@ -31,8 +31,8 @@ public class frmCliente extends JDialog {
 	private JTextField txtContato;
 	private JTextField txtEndereco;
 	private JTextField txtCEP;
-	private JTextField textField_7;
-	private JTextField textField_8;
+	private JTextField txtBairro;
+	private JTextField textCidade;
 
 	/**
 	 * Launch the application.
@@ -96,10 +96,10 @@ public class frmCliente extends JDialog {
 		txtCEP.setBounds(100, 278, 279, 30);
 		contentPanel.add(txtCEP);
 		
-		textField_7 = new JTextField();
-		textField_7.setColumns(10);
-		textField_7.setBounds(100, 319, 279, 30);
-		contentPanel.add(textField_7);
+		txtBairro = new JTextField();
+		txtBairro.setColumns(10);
+		txtBairro.setBounds(100, 319, 279, 30);
+		contentPanel.add(txtBairro);
 		
 		JLabel lblID = new JLabel("ID");
 		lblID.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -144,10 +144,10 @@ public class frmCliente extends JDialog {
 		lblCep.setBounds(34, 286, 46, 14);
 		contentPanel.add(lblCep);
 		
-		textField_8 = new JTextField();
-		textField_8.setColumns(10);
-		textField_8.setBounds(452, 319, 279, 30);
-		contentPanel.add(textField_8);
+		textCidade = new JTextField();
+		textCidade.setColumns(10);
+		textCidade.setBounds(452, 319, 279, 30);
+		contentPanel.add(textCidade);
 		
 		JLabel lblBairro = new JLabel("Bairro");
 		lblBairro.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -245,29 +245,29 @@ public class frmCliente extends JDialog {
 		btnEditar.setBounds(237, 26, 129, 43);
 		panel_1.add(btnEditar);
 		
-		JButton btnAdicionar_1_1 = new JButton("EXCLUIR");
-		btnAdicionar_1_1.addActionListener(new ActionListener() {
+		JButton btnExcluir = new JButton("EXCLUIR");
+		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnAdicionar_1_1.setIconTextGap(12);
-		btnAdicionar_1_1.setForeground(Color.WHITE);
-		btnAdicionar_1_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnAdicionar_1_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAdicionar_1_1.setBorderPainted(false);
-		btnAdicionar_1_1.setBackground(new Color(32, 178, 170));
-		btnAdicionar_1_1.setBounds(429, 26, 129, 43);
-		panel_1.add(btnAdicionar_1_1);
+		btnExcluir.setIconTextGap(12);
+		btnExcluir.setForeground(Color.WHITE);
+		btnExcluir.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnExcluir.setBorderPainted(false);
+		btnExcluir.setBackground(new Color(32, 178, 170));
+		btnExcluir.setBounds(429, 26, 129, 43);
+		panel_1.add(btnExcluir);
 		
-		JButton btnAdicionar_1_1_1 = new JButton("VOLTAR");
-		btnAdicionar_1_1_1.setIconTextGap(12);
-		btnAdicionar_1_1_1.setForeground(Color.WHITE);
-		btnAdicionar_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnAdicionar_1_1_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAdicionar_1_1_1.setBorderPainted(false);
-		btnAdicionar_1_1_1.setBackground(new Color(32, 178, 170));
-		btnAdicionar_1_1_1.setBounds(604, 26, 129, 43);
-		panel_1.add(btnAdicionar_1_1_1);
+		JButton btnVoltar = new JButton("VOLTAR");
+		btnVoltar.setIconTextGap(12);
+		btnVoltar.setForeground(Color.WHITE);
+		btnVoltar.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnVoltar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnVoltar.setBorderPainted(false);
+		btnVoltar.setBackground(new Color(32, 178, 170));
+		btnVoltar.setBounds(604, 26, 129, 43);
+		panel_1.add(btnVoltar);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setBounds(614, 81, 113, 89);
