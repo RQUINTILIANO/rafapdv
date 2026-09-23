@@ -105,10 +105,13 @@ public class Main extends JFrame {
 
 		JButton btnProdutos = new JButton("PRODUTOS");
 		btnProdutos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frmProduto produto = new frmProduto();
-				produto.setVisible(true);
-			}
+		    public void actionPerformed(ActionEvent e) {
+
+		        frmProduto produto = new frmProduto(Main.this, true);
+		        produto.setLocationRelativeTo(Main.this);
+		        produto.setVisible(true);
+
+		    }
 		});
 		btnProdutos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnProdutos.setBorderPainted(false);

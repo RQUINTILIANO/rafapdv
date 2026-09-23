@@ -1,377 +1,883 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Frame;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-//importar o ProdutoController (CRUD produtos)
 import controller.ProdutoController;
 import model.Produto;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import java.awt.SystemColor;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.ImageIcon;
 
 public class frmProduto extends JDialog {
-	
-	//Criar os obejtos controller (produtos)
-	ProdutoController controllerProduto = new ProdutoController();
-     
-    //Criar os objetos fornecedor e produto
-    Produto produto = new Produto();
-   	
-	private static final long serialVersionUID = 1L;
-	private JTextField txtIDProduto;
-	private JTextField txtBarcode;
-	private JTextField txtDescricao;
-	private JTextField txtIDFornecedor;
-	private JTextField txtPrecoCusto;
-	private JTextField txtPrecoVenda;
-	private JTextField txtQuantidade;
-	private JTextField txtEstoqueMinimo;
-	private JTextField txtCategoria;
-	private JComboBox<String>cboFornecedor;
-	private JPanel panel;
-	private JPanel panel_1;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frmProduto dialog = new frmProduto();
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Create the dialog.
-	 */
-	public frmProduto() {
-		
-		produto = new Produto();
-		
-		setModal(true);
-		setResizable(false);
-		setTitle("Produtos");
-		setBounds(100, 100, 1000, 600);
-		
-		setLocationRelativeTo(null); //centralizar
-		getContentPane().setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("ID");
-		lblNewLabel.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel.setForeground(new Color(32, 178, 170));
-		lblNewLabel.setBounds(37, 146, 46, 14);
-		getContentPane().add(lblNewLabel);
-		
-		txtIDProduto = new JTextField();
-		txtIDProduto.setEnabled(false);
-		txtIDProduto.setBounds(138, 144, 86, 20);
-		getContentPane().add(txtIDProduto);
-		txtIDProduto.setColumns(10);
-		
-		txtBarcode = new JTextField();
-		txtBarcode.setBounds(407, 140, 365, 28);
-		getContentPane().add(txtBarcode);
-		txtBarcode.setColumns(10);
-		
-		JLabel lblNewLabel_2 = new JLabel("PRODUTO");
-		lblNewLabel_2.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_2.setForeground(new Color(32, 178, 170));
-		lblNewLabel_2.setBounds(37, 194, 119, 14);
-		getContentPane().add(lblNewLabel_2);
-		
-		txtDescricao = new JTextField();
-		txtDescricao.setBounds(138, 188, 312, 28);
-		getContentPane().add(txtDescricao);
-		txtDescricao.setColumns(10);
-		
-		JLabel lblNewLabel_3 = new JLabel("FORNECEDOR");
-		lblNewLabel_3.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_3.setForeground(new Color(32, 178, 170));
-		lblNewLabel_3.setBounds(485, 267, 108, 14);
-		getContentPane().add(lblNewLabel_3);
-		
-		cboFornecedor = new JComboBox();
-		//=========================================================
-		//Evento que seleciona um item da lista (id do fornecedor)
-		cboFornecedor.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-		//Obter o intem selecionado do comobox
-		String selecionado= (String) cboFornecedor.getSelectedItem();
-		
-		
-	    // SE item for selecionado 
-			if(selecionado != null && !selecionado.equals("selecione")){
-		//separar o ID	do nome (Indice [0] do vetor)
-			String id = selecionado.split(" - ")[0];
-		//setar (preencher) o id do fornecedor
-			txtIDFornecedor.setText(id);
-			} else {
-	    //Nenhum forncedor adicionado
-			txtIDFornecedor.setText("");
-				
-				
-			}
-			}
-		});
-		//=========================================================
-		cboFornecedor.setBounds(593, 261, 179, 28);
-		getContentPane().add(cboFornecedor);
-		
-		JLabel lblNewLabel_4 = new JLabel("ID Fornecedor");
-		lblNewLabel_4.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_4.setForeground(new Color(32, 178, 170));
-		lblNewLabel_4.setBounds(488, 311, 133, 14);
-		getContentPane().add(lblNewLabel_4);
-		
-		txtIDFornecedor = new JTextField();
-		txtIDFornecedor.setEnabled(false);
-		txtIDFornecedor.setBounds(593, 309, 86, 20);
-		getContentPane().add(txtIDFornecedor);
-		txtIDFornecedor.setColumns(10);
-		
-		JLabel lblNewLabel_5 = new JLabel("CUSTO");
-		lblNewLabel_5.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_5.setForeground(new Color(32, 178, 170));
-		lblNewLabel_5.setBounds(37, 311, 46, 14);
-		getContentPane().add(lblNewLabel_5);
-		
-		txtPrecoCusto = new JTextField();
-		txtPrecoCusto.setBounds(138, 305, 102, 28);
-		getContentPane().add(txtPrecoCusto);
-		txtPrecoCusto.setColumns(10);
-		
-		JLabel lblNewLabel_6 = new JLabel("VENDA");
-		lblNewLabel_6.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_6.setForeground(new Color(32, 178, 170));
-		lblNewLabel_6.setBounds(256, 311, 64, 14);
-		getContentPane().add(lblNewLabel_6);
-		
-		txtPrecoVenda = new JTextField();
-		txtPrecoVenda.setColumns(10);
-		txtPrecoVenda.setBounds(319, 305, 133, 28);
-		getContentPane().add(txtPrecoVenda);
-		
-		txtQuantidade = new JTextField();
-		txtQuantidade.setBounds(137, 386, 74, 28);
-		getContentPane().add(txtQuantidade);
-		txtQuantidade.setColumns(10);
-		
-		JLabel lblNewLabel_7 = new JLabel("QUANTIDADE");
-		lblNewLabel_7.setForeground(new Color(32, 178, 170));
-		lblNewLabel_7.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_7.setBounds(37, 392, 119, 14);
-		getContentPane().add(lblNewLabel_7);
-		
-		JLabel lblNewLabel_8 = new JLabel("ESTOQUE MÍNIMO");
-		lblNewLabel_8.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_8.setForeground(new Color(32, 178, 170));
-		lblNewLabel_8.setBounds(244, 392, 141, 14);
-		getContentPane().add(lblNewLabel_8);
-		
-		txtEstoqueMinimo = new JTextField();
-		txtEstoqueMinimo.setBounds(376, 386, 74, 28);
-		getContentPane().add(txtEstoqueMinimo);
-		txtEstoqueMinimo.setColumns(10);
-		
-		JLabel lblNewLabel_9 = new JLabel("CATEGORIA");
-		lblNewLabel_9.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblNewLabel_9.setForeground(new Color(32, 178, 170));
-		lblNewLabel_9.setBounds(37, 267, 119, 14);
-		getContentPane().add(lblNewLabel_9);
-		
-		txtCategoria = new JTextField();
-		txtCategoria.setBounds(138, 261, 312, 28);
-		getContentPane().add(txtCategoria);
-		txtCategoria.setColumns(10);
-		
-		panel = new JPanel();
-		panel.setBackground(new Color(32, 178, 170));
-		panel.setBounds(0, 442, 984, 119);
-		getContentPane().add(panel);
-		panel.setLayout(null);
-		
-		JButton btnAdicionarProduto = new JButton("ADICIONAR");
-		btnAdicionarProduto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnAdicionarProduto.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		btnAdicionarProduto.setForeground(new Color(32, 178, 170));
-		btnAdicionarProduto.setBounds(99, 24, 145, 64);
-		panel.add(btnAdicionarProduto);
-		btnAdicionarProduto.setToolTipText("Adicionar");
-		btnAdicionarProduto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		
-		JButton btnEditarProduto = new JButton("EDITAR");
-		btnEditarProduto.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		btnEditarProduto.setForeground(new Color(32, 178, 170));
-		btnEditarProduto.setBounds(302, 24, 151, 64);
-		panel.add(btnEditarProduto);
-		btnEditarProduto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnEditarProduto.setToolTipText("Editar");
-		
-		JButton btnExcluirProduto = new JButton("EXCLUIR");
-		btnExcluirProduto.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		btnExcluirProduto.setForeground(new Color(32, 178, 170));
-		btnExcluirProduto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnExcluirProduto.setBounds(497, 24, 170, 64);
-		panel.add(btnExcluirProduto);
-		btnExcluirProduto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnExcluirProduto.setToolTipText("Excluir");
-		
-		JButton btnRelatorioProdutos = new JButton("GERAR RELATÓRIO");
-		btnRelatorioProdutos.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		btnRelatorioProdutos.setForeground(new Color(32, 178, 170));
-		btnRelatorioProdutos.setBounds(715, 24, 170, 64);
-		panel.add(btnRelatorioProdutos);
-		btnRelatorioProdutos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnRelatorioProdutos.setToolTipText("GERAR RELATÓRIO");
-		
-		panel_1 = new JPanel();
-		panel_1.setBackground(new Color(32, 178, 170));
-		panel_1.setBounds(0, 0, 984, 124);
-		getContentPane().add(panel_1);
-		panel_1.setLayout(null);
-		
-		JLabel lblNewLabel_10 = new JLabel("CENTRAL DE PRODUTOS");
-		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 30));
-		lblNewLabel_10.setForeground(new Color(255, 255, 255));
-		lblNewLabel_10.setIcon(new ImageIcon(frmProduto.class.getResource("/img/PRODUTOS.png")));
-		lblNewLabel_10.setBounds(34, 25, 596, 77);
-		panel_1.add(lblNewLabel_10);
-		
-		JLabel lblNewLabel_12 = new JLabel("");
-		lblNewLabel_12.setBounds(841, 307, 133, 124);
-		getContentPane().add(lblNewLabel_12);
-		lblNewLabel_12.setIcon(new ImageIcon(frmProduto.class.getResource("/img/LOGO2.png")));
-		
-		JLabel lblNewLabel_13_1 = new JLabel("______________________________________________________________________________________________________________");
-		lblNewLabel_13_1.setForeground(SystemColor.scrollbar);
-		lblNewLabel_13_1.setBounds(40, 350, 817, 14);
-		getContentPane().add(lblNewLabel_13_1);
-		
-		JLabel lblNewLabel_13_1_1 = new JLabel("______________________________________________________________________________________________________________");
-		lblNewLabel_13_1_1.setForeground(SystemColor.scrollbar);
-		lblNewLabel_13_1_1.setBounds(37, 219, 817, 14);
-		getContentPane().add(lblNewLabel_13_1_1);
-		
-		JLabel lblCodBarras = new JLabel("CÓDIGO DE BARRAS");
-		lblCodBarras.setForeground(new Color(32, 178, 170));
-		lblCodBarras.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		lblCodBarras.setBounds(256, 146, 228, 14);
-		getContentPane().add(lblCodBarras);
-		
-		JButton btnNewButton = new JButton("BUSCAR");
-		btnNewButton.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-		btnNewButton.setBackground(new Color(32, 178, 170));
-		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBounds(485, 191, 108, 23);
-		getContentPane().add(btnNewButton);
-		
-		//Executar o metodo para carregar o ID dos fornecedores
-		carregarFornecedor();
-	
-		
-		btnAdicionar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// validação de campos obrigatórios
-				if (txtNome.getText().isBlank()) {
-					JOptionPane.showMessageDialog(null, "Preencha o nome do produto");
-					txtNome.requestFocus();
-				} else if (txtFone.getText().isBlank()) {
-					JOptionPane.showMessageDialog(null, "Preencha o nome do produto");
-					txtFone.requestFocus();
-				} else {
-					// lógica principal se os os campos obrigatórios estiverem preenchidos
+    private ProdutoController controllerProduto = new ProdutoController();
 
-					// Transferir os dados da tela para o objeto
-					produto.setIdProduto(txtIdProduto.getText());
-					produto.setDescricao(txtDescricao.getText());
-					produto.setCategoria(txtCategoria.getText());
-					produto.setIdFornecedor(txtIdFornecedor.getText());
-					produto.setPrecoCusto(txtPrecoCusto.getText());
-					produto.setPrecoVenda(txtPrecoVenda.getText());
-					produto.setQuantidade(txtQuantidade.getText());
-					produto.setEstoqueMinimo(txtEstoqueMinimo.getText());
-					// Enviar o objeto para o controller
-					controller.Adicionar(produto);
-					// Mensagem de confirmação
-					JOptionPane.showMessageDialog(null, "Fornecedor adicionado com sucesso.");
-					// Limpar campos
-					limparCampos();
-				}
-			}
-		});
+    private JTextField txtIDProduto;
+    private JTextField txtBarcode;
+    private JTextField txtDescricao;
+    private JTextField txtIDFornecedor;
+    private JTextField txtPrecoCusto;
+    private JTextField txtPrecoVenda;
+    private JTextField txtQuantidade;
+    private JTextField txtEstoqueMinimo;
+    private JTextField txtCategoria;
 
-	}// fim do construtor
-	
-	//=================================================
-	//preencher o como box com a lista de clientes 
-	//=================================================
-	 private void carregarProduto(){
-		 //limpar o como box
-		 cboProduto.removeAllItems();
-		 //Opção padrão
-		 cboProduto.addItem("selecione");
-		 //Executar o método para buscar a lista de produtos(array)
-		 ArrayList<Produto> lista = controllerProduto.listaproduto();
-		 //Percorrer o vetor e adicionar os fornecedores ao comobox
-		 for (Produto produto : lista) {
-	     Object cbo;
-		 //Exibir o ID e nome do fornecedor no comobox
-		 cboProduto.addItem(produto.getIdProduto() + " - " + produto.getNome());
-		 }
-	 }
-	//=================================================
-		// CRUD Delete - Excluir produto =====================
-		// ======================================================
-		btnExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// validação
-				if (txtNome.getText().isBlank()) {
-					JOptionPane.showMessageDialog(null, "Digite o nome do produto");
-					txtNome.requestFocus();
-				} else {
-					// capturar o id do produto
-					int idProduto = Integer.parseInt(txtID.getText());
+    private JComboBox<String> cboProduto;
 
-					// confirmação de exclusão
-					int resposta = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir\neste produto?",
-							"Atenção!", JOptionPane.YES_OPTION);
-					if (resposta == JOptionPane.YES_OPTION) {
-						// excluir através do controller
-						controller.Excluir(idProduto);
-						// limpar os campos
-						limparCampos();
-						// mensagem para o usuário
-						JOptionPane.showMessageDialog(null, "Produto excluído com sucesso.");
-					}
-				}
-			}
-		});
-	
+    private JButton btnAdicionar;
+    private JButton btnEditar;
+    private JButton btnExcluir;
+    private JButton btnLimpar;
+    private JButton btnBuscar;
+    private JPanel panel;
+
+    public frmProduto(Frame parent, boolean modal) {
+        super(parent, modal);
+        inicializarComponentes();
+        carregarProduto();
+    }
+
+    private void inicializarComponentes() {
+
+        setTitle("Cadastro de Produtos");
+        setSize(1000, 600);
+        setLocationRelativeTo(getParent());
+        setResizable(false);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        getContentPane().setLayout(null);
+
+        // =========================
+        // ID DO PRODUTO
+        // =========================
+
+        JLabel lblIDProduto = new JLabel("ID PRODUTO:");
+        lblIDProduto.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblIDProduto.setForeground(new Color(32, 178, 170));
+        lblIDProduto.setBounds(30, 155, 100, 25);
+        getContentPane().add(lblIDProduto);
+
+        txtIDProduto = new JTextField();
+        txtIDProduto.setBounds(130, 155, 100, 25);
+        txtIDProduto.setEditable(false);
+        getContentPane().add(txtIDProduto);
+
+        // =========================
+        // CÓDIGO DE BARRAS
+        // =========================
+
+        JLabel lblBarcode = new JLabel("CÓDIGO DE BARRAS:");
+        lblBarcode.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblBarcode.setForeground(new Color(32, 178, 170));
+        lblBarcode.setBounds(287, 155, 151, 25);
+        getContentPane().add(lblBarcode);
+
+        txtBarcode = new JTextField();
+        txtBarcode.setBounds(430, 155, 301, 25);
+        getContentPane().add(txtBarcode);
+
+        // =========================
+        // DESCRIÇÃO
+        // =========================
+
+        JLabel lblDescricao = new JLabel("DESCRIÇÃO:");
+        lblDescricao.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblDescricao.setForeground(new Color(32, 178, 170));
+        lblDescricao.setBounds(30, 203, 100, 25);
+        getContentPane().add(lblDescricao);
+
+        txtDescricao = new JTextField();
+        txtDescricao.setBounds(130, 203, 601, 25);
+        getContentPane().add(txtDescricao);
+
+        // =========================
+        // CATEGORIA
+        // =========================
+
+        JLabel lblCategoria = new JLabel("CATEGORIA:");
+        lblCategoria.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblCategoria.setForeground(new Color(32, 178, 170));
+        lblCategoria.setBounds(30, 261, 100, 25);
+        getContentPane().add(lblCategoria);
+
+        txtCategoria = new JTextField();
+        txtCategoria.setBounds(130, 261, 200, 25);
+        getContentPane().add(txtCategoria);
+
+        // =========================
+        // FORNECEDOR
+        // =========================
+
+        JLabel lblIDFornecedor = new JLabel("ID FORNECEDOR:");
+        lblIDFornecedor.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblIDFornecedor.setForeground(new Color(32, 178, 170));
+        lblIDFornecedor.setBounds(401, 261, 130, 25);
+        getContentPane().add(lblIDFornecedor);
+
+        txtIDFornecedor = new JTextField();
+        txtIDFornecedor.setBounds(525, 262, 206, 25);
+        getContentPane().add(txtIDFornecedor);
+
+        // =========================
+        // PREÇO DE CUSTO
+        // =========================
+
+        JLabel lblPrecoCusto = new JLabel("PREÇO CUSTO:");
+        lblPrecoCusto.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblPrecoCusto.setForeground(new Color(32, 178, 170));
+        lblPrecoCusto.setBounds(30, 311, 100, 25);
+        getContentPane().add(lblPrecoCusto);
+
+        txtPrecoCusto = new JTextField();
+        txtPrecoCusto.setBounds(130, 311, 200, 25);
+        getContentPane().add(txtPrecoCusto);
+
+        // =========================
+        // PREÇO DE VENDA
+        // =========================
+
+        JLabel lblPrecoVenda = new JLabel("PREÇO VENDA:");
+        lblPrecoVenda.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblPrecoVenda.setForeground(new Color(32, 178, 170));
+        lblPrecoVenda.setBounds(403, 311, 100, 25);
+        getContentPane().add(lblPrecoVenda);
+
+        txtPrecoVenda = new JTextField();
+        txtPrecoVenda.setBounds(514, 311, 217, 25);
+        getContentPane().add(txtPrecoVenda);
+
+        // =========================
+        // QUANTIDADE
+        // =========================
+
+        JLabel lblQuantidade = new JLabel("QUANTIDADE:");
+        lblQuantidade.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblQuantidade.setForeground(new Color(32, 178, 170));
+        lblQuantidade.setBounds(30, 363, 100, 25);
+        getContentPane().add(lblQuantidade);
+
+        txtQuantidade = new JTextField();
+        txtQuantidade.setBounds(130, 364, 200, 25);
+        getContentPane().add(txtQuantidade);
+
+        // =========================
+        // ESTOQUE MÍNIMO
+        // =========================
+
+        JLabel lblEstoqueMinimo = new JLabel("ESTOQUE MÍNIMO:");
+        lblEstoqueMinimo.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblEstoqueMinimo.setBackground(new Color(240, 240, 240));
+        lblEstoqueMinimo.setForeground(new Color(32, 178, 170));
+        lblEstoqueMinimo.setBounds(406, 363, 125, 25);
+        getContentPane().add(lblEstoqueMinimo);
+
+        txtEstoqueMinimo = new JTextField();
+        txtEstoqueMinimo.setBounds(541, 363, 190, 25);
+        getContentPane().add(txtEstoqueMinimo);
+
+        // =========================
+        // COMBO PRODUTO
+        // =========================
+
+        JLabel lblSelecionar = new JLabel("SELECIONAR PRODUTO:");
+        lblSelecionar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        lblSelecionar.setForeground(new Color(32, 178, 170));
+        lblSelecionar.setBounds(30, 410, 178, 25);
+        getContentPane().add(lblSelecionar);
+
+        cboProduto = new JComboBox<>();
+        cboProduto.setBounds(201, 411, 530, 25);
+        getContentPane().add(cboProduto);
+
+        cboProduto.addActionListener(e -> selecionarProduto());
+        
+        panel = new JPanel();
+        panel.setBackground(SystemColor.scrollbar);
+        panel.setForeground(UIManager.getColor("Button.light"));
+        panel.setBounds(0, 462, 984, 99);
+        getContentPane().add(panel);
+        panel.setLayout(null);
+        
+                // =========================
+                // BOTÃO ADICIONAR
+                // =========================
+        
+                btnAdicionar = new JButton("ADICIONAR");
+                btnAdicionar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+                btnAdicionar.setForeground(new Color(255, 255, 255));
+                btnAdicionar.setBackground(new Color(32, 178, 170));
+                btnAdicionar.setBounds(53, 25, 162, 35);
+                panel.add(btnAdicionar);
+                
+                        // =========================
+                        // BOTÃO EDITAR
+                        // =========================
+                
+                        btnEditar = new JButton("EDITAR");
+                        btnEditar.setFont(new Font("Tahoma", Font.BOLD, 15));
+                        btnEditar.setBackground(new Color(32, 178, 170));
+                        btnEditar.setForeground(new Color(255, 255, 255));
+                        btnEditar.setBounds(229, 26, 162, 35);
+                        panel.add(btnEditar);
+                        
+                                // =========================
+                                // BOTÃO EXCLUIR
+                                // =========================
+                        
+                                btnExcluir = new JButton("EXCLUIR");
+                                btnExcluir.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+                                btnExcluir.setBackground(new Color(32, 178, 170));
+                                btnExcluir.setForeground(new Color(255, 255, 255));
+                                btnExcluir.setBounds(406, 26, 162, 35);
+                                panel.add(btnExcluir);
+                                
+                                        // =========================
+                                        // BOTÃO LIMPAR
+                                        // =========================
+                                
+                                        btnLimpar = new JButton("LIMPAR");
+                                        btnLimpar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+                                        btnLimpar.setBackground(new Color(32, 178, 170));
+                                        btnLimpar.setForeground(new Color(255, 255, 255));
+                                        btnLimpar.setBounds(583, 26, 162, 35);
+                                        panel.add(btnLimpar);
+                                        
+                                                // =========================
+                                                // BOTÃO BUSCAR
+                                                // =========================
+                                        
+                                                btnBuscar = new JButton("BUSCAR");
+                                                btnBuscar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+                                                btnBuscar.setBackground(new Color(32, 178, 170));
+                                                btnBuscar.setForeground(new Color(255, 255, 255));
+                                                btnBuscar.setBounds(759, 26, 162, 35);
+                                                panel.add(btnBuscar);
+                                                
+                                                JPanel panel_1 = new JPanel();
+                                                panel_1.setBackground(new Color(32, 178, 170));
+                                                panel_1.setBounds(0, 0, 984, 92);
+                                                getContentPane().add(panel_1);
+                                                panel_1.setLayout(null);
+                                                
+                                                JLabel lblNewLabel = new JLabel("CENTRAL PRODUTOS");
+                                                lblNewLabel.setFont(new Font("Arial Black", Font.BOLD, 30));
+                                                lblNewLabel.setForeground(new Color(255, 255, 255));
+                                                lblNewLabel.setIcon(new ImageIcon(frmProduto.class.getResource("/img/PRODUTOS.png")));
+                                                lblNewLabel.setBounds(28, 0, 518, 90);
+                                                panel_1.add(lblNewLabel);
+                                                
+                                                JLabel lblNewLabel_1 = new JLabel("");
+                                                lblNewLabel_1.setIcon(new ImageIcon(frmProduto.class.getResource("/img/LOGO2.png")));
+                                                lblNewLabel_1.setBounds(804, 229, 151, 105);
+                                                getContentPane().add(lblNewLabel_1);
+                                                
+                                                        btnBuscar.addActionListener(e -> buscarProduto());
+                                        
+                                                btnLimpar.addActionListener(e -> limparCampos());
+                                
+                                        btnExcluir.addActionListener(e -> excluirProduto());
+                        
+                                btnEditar.addActionListener(e -> editarProduto());
+                
+                        btnAdicionar.addActionListener(e -> adicionarProduto());
+    }
+
+    // =========================================================
+    // ADICIONAR PRODUTO
+    // =========================================================
+
+    private void adicionarProduto() {
+
+        try {
+
+            if (txtDescricao.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe a descrição do produto."
+                );
+                txtDescricao.requestFocus();
+                return;
+            }
+
+            if (txtCategoria.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe a categoria do produto."
+                );
+                txtCategoria.requestFocus();
+                return;
+            }
+
+            if (txtIDFornecedor.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o ID do fornecedor."
+                );
+                txtIDFornecedor.requestFocus();
+                return;
+            }
+
+            if (txtPrecoCusto.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o preço de custo."
+                );
+                txtPrecoCusto.requestFocus();
+                return;
+            }
+
+            if (txtPrecoVenda.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o preço de venda."
+                );
+                txtPrecoVenda.requestFocus();
+                return;
+            }
+
+            if (txtQuantidade.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe a quantidade."
+                );
+                txtQuantidade.requestFocus();
+                return;
+            }
+
+            if (txtEstoqueMinimo.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o estoque mínimo."
+                );
+                txtEstoqueMinimo.requestFocus();
+                return;
+            }
+
+            Produto novoProduto = new Produto();
+
+            novoProduto.setCodigoBarras(txtBarcode.getText().trim());
+            novoProduto.setDescricao(txtDescricao.getText().trim());
+            novoProduto.setCategoria(txtCategoria.getText().trim());
+
+            novoProduto.setIdFornecedor(
+                    Integer.parseInt(txtIDFornecedor.getText().trim())
+            );
+
+            novoProduto.setPrecoCusto(
+                    Double.parseDouble(
+                            txtPrecoCusto.getText()
+                                    .trim()
+                                    .replace(",", ".")
+                    )
+            );
+
+            novoProduto.setPrecoVenda(
+                    Double.parseDouble(
+                            txtPrecoVenda.getText()
+                                    .trim()
+                                    .replace(",", ".")
+                    )
+            );
+
+            novoProduto.setQuantidade(
+                    Integer.parseInt(txtQuantidade.getText().trim())
+            );
+
+            novoProduto.setEstoqueMinimo(
+                    Integer.parseInt(txtEstoqueMinimo.getText().trim())
+            );
+
+            // Usa o controller da tela
+            controllerProduto.Adicionar(novoProduto);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Produto adicionado com sucesso!"
+            );
+
+            limparCampos();
+            carregarProduto();
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Verifique os campos numéricos.\n"
+                    + "Fornecedor, preços, quantidade e estoque mínimo "
+                    + "devem conter valores válidos.",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao adicionar produto:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    // =========================================================
+    // EDITAR PRODUTO
+    // =========================================================
+
+    private void editarProduto() {
+
+        try {
+
+            if (txtIDProduto.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Selecione um produto para editar."
+                );
+                return;
+            }
+
+            if (txtDescricao.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe a descrição do produto."
+                );
+                txtDescricao.requestFocus();
+                return;
+            }
+
+            if (txtCategoria.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe a categoria do produto."
+                );
+                txtCategoria.requestFocus();
+                return;
+            }
+
+            if (txtIDFornecedor.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o ID do fornecedor."
+                );
+                txtIDFornecedor.requestFocus();
+                return;
+            }
+
+            if (txtPrecoCusto.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o preço de custo."
+                );
+                txtPrecoCusto.requestFocus();
+                return;
+            }
+
+            if (txtPrecoVenda.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o preço de venda."
+                );
+                txtPrecoVenda.requestFocus();
+                return;
+            }
+
+            if (txtQuantidade.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe a quantidade."
+                );
+                txtQuantidade.requestFocus();
+                return;
+            }
+
+            if (txtEstoqueMinimo.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Informe o estoque mínimo."
+                );
+                txtEstoqueMinimo.requestFocus();
+                return;
+            }
+
+            Produto produtoEditar = new Produto();
+
+            produtoEditar.setIdProduto(
+                    Integer.parseInt(txtIDProduto.getText().trim())
+            );
+
+            produtoEditar.setCodigoBarras(
+                    txtBarcode.getText().trim()
+            );
+
+            produtoEditar.setDescricao(
+                    txtDescricao.getText().trim()
+            );
+
+            produtoEditar.setCategoria(
+                    txtCategoria.getText().trim()
+            );
+
+            produtoEditar.setIdFornecedor(
+                    Integer.parseInt(
+                            txtIDFornecedor.getText().trim()
+                    )
+            );
+
+            produtoEditar.setPrecoCusto(
+                    Double.parseDouble(
+                            txtPrecoCusto.getText()
+                                    .trim()
+                                    .replace(",", ".")
+                    )
+            );
+
+            produtoEditar.setPrecoVenda(
+                    Double.parseDouble(
+                            txtPrecoVenda.getText()
+                                    .trim()
+                                    .replace(",", ".")
+                    )
+            );
+
+            produtoEditar.setQuantidade(
+                    Integer.parseInt(
+                            txtQuantidade.getText().trim()
+                    )
+            );
+
+            produtoEditar.setEstoqueMinimo(
+                    Integer.parseInt(
+                            txtEstoqueMinimo.getText().trim()
+                    )
+            );
+
+            controllerProduto.Editar(produtoEditar);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Produto atualizado com sucesso!"
+            );
+
+            limparCampos();
+            carregarProduto();
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Verifique os campos numéricos.\n"
+                    + "ID, fornecedor, preços, quantidade e "
+                    + "estoque mínimo devem conter valores válidos.",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao editar produto:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    // =========================================================
+    // EXCLUIR PRODUTO
+    // =========================================================
+
+    private void excluirProduto() {
+
+        try {
+
+            if (txtIDProduto.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Selecione um produto para excluir."
+                );
+                return;
+            }
+
+            int resposta = JOptionPane.showConfirmDialog(
+                    this,
+                    "Deseja realmente excluir este produto?",
+                    "Confirmar exclusão",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (resposta != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            int idProduto = Integer.parseInt(
+                    txtIDProduto.getText().trim()
+            );
+
+            controllerProduto.Excluir(idProduto);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Produto excluído com sucesso!"
+            );
+
+            limparCampos();
+            carregarProduto();
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "ID do produto inválido.",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao excluir produto:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    // =========================================================
+    // BUSCAR PRODUTO
+    // =========================================================
+    
+
+    private void buscarProduto() {
+
+        try {
+
+            String descricao = txtDescricao.getText().trim();
+
+            if (descricao.isEmpty()) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Digite a descrição do produto para buscar."
+                );
+
+                txtDescricao.requestFocus();
+                return;
+            }
+
+            Produto produtoEncontrado =
+                    controllerProduto.buscar(descricao);
+
+            if (produtoEncontrado == null) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Nenhum produto encontrado."
+                );
+
+                return;
+            }
+
+            preencherCampos(produtoEncontrado);
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao buscar produto:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    // =========================================================
+    // CARREGAR PRODUTOS
+    // =========================================================
+
+    private void carregarProduto() {
+
+        try {
+
+            cboProduto.removeAllItems();
+
+            // CORREÇÃO:
+            // listaproduto() é método de instância
+            ArrayList<Produto> lista =
+                    controllerProduto.listaproduto();
+
+            if (lista == null) {
+                return;
+            }
+
+            for (Produto produto : lista) {
+
+                String item =
+                        produto.getIdProduto()
+                        + " - "
+                        + produto.getDescricao();
+
+                cboProduto.addItem(item);
+            }
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao carregar produtos:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    // =========================================================
+    // SELECIONAR PRODUTO NO COMBO
+    // =========================================================
+
+    private void selecionarProduto() {
+
+        try {
+
+            if (cboProduto.getSelectedItem() == null) {
+                return;
+            }
+
+            String item =
+                    cboProduto.getSelectedItem().toString();
+
+            if (item.trim().isEmpty()) {
+                return;
+            }
+
+            String[] partes = item.split(" - ", 2);
+
+            if (partes.length == 0) {
+                return;
+            }
+
+            int idProduto =
+                    Integer.parseInt(partes[0].trim());
+
+            // CORREÇÃO:
+            // listaproduto() é método de instância
+            ArrayList<Produto> lista =
+                    controllerProduto.listaproduto();
+
+            if (lista == null) {
+                return;
+            }
+
+            for (Produto produto : lista) {
+
+                if (produto.getIdProduto() == idProduto) {
+
+                    preencherCampos(produto);
+                    break;
+                }
+            }
+
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "ID do produto inválido.",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Erro ao selecionar produto:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    // =========================================================
+    // PREENCHER CAMPOS
+    // =========================================================
+
+    private void preencherCampos(Produto produto) {
+
+        if (produto == null) {
+            return;
+        }
+
+        txtIDProduto.setText(
+                String.valueOf(produto.getIdProduto())
+        );
+
+        txtDescricao.setText(
+                produto.getDescricao()
+        );
+
+        txtCategoria.setText(
+                produto.getCategoria()
+        );
+
+        txtIDFornecedor.setText(
+                String.valueOf(produto.getIdFornecedor())
+        );
+
+        txtPrecoCusto.setText(
+                String.valueOf(produto.getPrecoCusto())
+        );
+
+        txtPrecoVenda.setText(
+                String.valueOf(produto.getPrecoVenda())
+        );
+
+        txtQuantidade.setText(
+                String.valueOf(produto.getQuantidade())
+        );
+
+        txtEstoqueMinimo.setText(
+                String.valueOf(produto.getEstoqueMinimo())
+        );
+
+        txtBarcode.setText(
+                produto.getCodigoBarras()
+        );
+    }
+
+    // =========================================================
+    // LIMPAR CAMPOS
+    // =========================================================
+
+    private void limparCampos() {
+
+        txtIDProduto.setText("");
+        txtBarcode.setText("");
+        txtDescricao.setText("");
+        txtIDFornecedor.setText("");
+        txtPrecoCusto.setText("");
+        txtPrecoVenda.setText("");
+        txtQuantidade.setText("");
+        txtEstoqueMinimo.setText("");
+        txtCategoria.setText("");
+
+        if (cboProduto.getItemCount() > 0) {
+            cboProduto.setSelectedIndex(-1);
+        }
+
+        txtDescricao.requestFocus();
+    }
 }
-

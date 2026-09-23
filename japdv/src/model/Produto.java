@@ -67,5 +67,10 @@ public class Produto {
 	}
 	public void setIdFornecedor(int idFornecedor) {
 		this.idFornecedor = idFornecedor;
+	}
+
+	public Produto get(int i) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }
