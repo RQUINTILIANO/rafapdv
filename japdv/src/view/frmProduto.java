@@ -1,28 +1,31 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Frame;
+import java.awt.SystemColor;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import controller.ProdutoController;
 import model.Produto;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import java.awt.SystemColor;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class frmProduto extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
+    // Controller da tela
     private ProdutoController controllerProduto = new ProdutoController();
 
     private JTextField txtIDProduto;
@@ -42,10 +45,12 @@ public class frmProduto extends JDialog {
     private JButton btnExcluir;
     private JButton btnLimpar;
     private JButton btnBuscar;
+
     private JPanel panel;
 
     public frmProduto(Frame parent, boolean modal) {
         super(parent, modal);
+
         inicializarComponentes();
         carregarProduto();
     }
@@ -60,9 +65,9 @@ public class frmProduto extends JDialog {
 
         getContentPane().setLayout(null);
 
-        // =========================
+        // =========================================================
         // ID DO PRODUTO
-        // =========================
+        // =========================================================
 
         JLabel lblIDProduto = new JLabel("ID PRODUTO:");
         lblIDProduto.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -75,9 +80,9 @@ public class frmProduto extends JDialog {
         txtIDProduto.setEditable(false);
         getContentPane().add(txtIDProduto);
 
-        // =========================
+        // =========================================================
         // CÓDIGO DE BARRAS
-        // =========================
+        // =========================================================
 
         JLabel lblBarcode = new JLabel("CÓDIGO DE BARRAS:");
         lblBarcode.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -89,9 +94,9 @@ public class frmProduto extends JDialog {
         txtBarcode.setBounds(430, 155, 301, 25);
         getContentPane().add(txtBarcode);
 
-        // =========================
+        // =========================================================
         // DESCRIÇÃO
-        // =========================
+        // =========================================================
 
         JLabel lblDescricao = new JLabel("DESCRIÇÃO:");
         lblDescricao.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -103,9 +108,9 @@ public class frmProduto extends JDialog {
         txtDescricao.setBounds(130, 203, 601, 25);
         getContentPane().add(txtDescricao);
 
-        // =========================
+        // =========================================================
         // CATEGORIA
-        // =========================
+        // =========================================================
 
         JLabel lblCategoria = new JLabel("CATEGORIA:");
         lblCategoria.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -117,9 +122,9 @@ public class frmProduto extends JDialog {
         txtCategoria.setBounds(130, 261, 200, 25);
         getContentPane().add(txtCategoria);
 
-        // =========================
+        // =========================================================
         // FORNECEDOR
-        // =========================
+        // =========================================================
 
         JLabel lblIDFornecedor = new JLabel("ID FORNECEDOR:");
         lblIDFornecedor.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -131,9 +136,9 @@ public class frmProduto extends JDialog {
         txtIDFornecedor.setBounds(525, 262, 206, 25);
         getContentPane().add(txtIDFornecedor);
 
-        // =========================
+        // =========================================================
         // PREÇO DE CUSTO
-        // =========================
+        // =========================================================
 
         JLabel lblPrecoCusto = new JLabel("PREÇO CUSTO:");
         lblPrecoCusto.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -145,9 +150,9 @@ public class frmProduto extends JDialog {
         txtPrecoCusto.setBounds(130, 311, 200, 25);
         getContentPane().add(txtPrecoCusto);
 
-        // =========================
+        // =========================================================
         // PREÇO DE VENDA
-        // =========================
+        // =========================================================
 
         JLabel lblPrecoVenda = new JLabel("PREÇO VENDA:");
         lblPrecoVenda.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -159,9 +164,9 @@ public class frmProduto extends JDialog {
         txtPrecoVenda.setBounds(514, 311, 217, 25);
         getContentPane().add(txtPrecoVenda);
 
-        // =========================
+        // =========================================================
         // QUANTIDADE
-        // =========================
+        // =========================================================
 
         JLabel lblQuantidade = new JLabel("QUANTIDADE:");
         lblQuantidade.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -173,13 +178,12 @@ public class frmProduto extends JDialog {
         txtQuantidade.setBounds(130, 364, 200, 25);
         getContentPane().add(txtQuantidade);
 
-        // =========================
+        // =========================================================
         // ESTOQUE MÍNIMO
-        // =========================
+        // =========================================================
 
         JLabel lblEstoqueMinimo = new JLabel("ESTOQUE MÍNIMO:");
         lblEstoqueMinimo.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-        lblEstoqueMinimo.setBackground(new Color(240, 240, 240));
         lblEstoqueMinimo.setForeground(new Color(32, 178, 170));
         lblEstoqueMinimo.setBounds(406, 363, 125, 25);
         getContentPane().add(lblEstoqueMinimo);
@@ -188,9 +192,9 @@ public class frmProduto extends JDialog {
         txtEstoqueMinimo.setBounds(541, 363, 190, 25);
         getContentPane().add(txtEstoqueMinimo);
 
-        // =========================
-        // COMBO PRODUTO
-        // =========================
+        // =========================================================
+        // SELECIONAR PRODUTO
+        // =========================================================
 
         JLabel lblSelecionar = new JLabel("SELECIONAR PRODUTO:");
         lblSelecionar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
@@ -203,96 +207,128 @@ public class frmProduto extends JDialog {
         getContentPane().add(cboProduto);
 
         cboProduto.addActionListener(e -> selecionarProduto());
-        
+
+        // =========================================================
+        // PAINEL DOS BOTÕES
+        // =========================================================
+
         panel = new JPanel();
         panel.setBackground(SystemColor.scrollbar);
         panel.setForeground(UIManager.getColor("Button.light"));
         panel.setBounds(0, 462, 984, 99);
-        getContentPane().add(panel);
         panel.setLayout(null);
+        getContentPane().add(panel);
+
+        // =========================================================
+        // BOTÃO ADICIONAR
+        // =========================================================
+
+        btnAdicionar = new JButton("ADICIONAR");
+        btnAdicionar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        btnAdicionar.setForeground(Color.WHITE);
+        btnAdicionar.setBackground(new Color(32, 178, 170));
+        btnAdicionar.setBounds(53, 25, 162, 35);
+        panel.add(btnAdicionar);
+
+        // =========================================================
+        // BOTÃO EDITAR
+        // =========================================================
+
+        btnEditar = new JButton("EDITAR");
+        btnEditar.setFont(new Font("Tahoma", Font.BOLD, 15));
+        btnEditar.setBackground(new Color(32, 178, 170));
+        btnEditar.setForeground(Color.WHITE);
+        btnEditar.setBounds(229, 26, 162, 35);
+        panel.add(btnEditar);
+
+        // =========================================================
+        // BOTÃO EXCLUIR
+        // =========================================================
+
+        btnExcluir = new JButton("EXCLUIR");
+        btnExcluir.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        btnExcluir.setBackground(new Color(32, 178, 170));
+        btnExcluir.setForeground(Color.WHITE);
+        btnExcluir.setBounds(406, 26, 162, 35);
+        panel.add(btnExcluir);
+
+        // =========================================================
+        // BOTÃO LIMPAR
+        // =========================================================
+
+        btnLimpar = new JButton("LIMPAR");
+        btnLimpar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        btnLimpar.setBackground(new Color(32, 178, 170));
+        btnLimpar.setForeground(Color.WHITE);
+        btnLimpar.setBounds(583, 26, 162, 35);
+        panel.add(btnLimpar);
+
+        // =========================================================
+        // BOTÃO BUSCAR
+        // =========================================================
+
+        btnBuscar = new JButton("BUSCAR");
+        btnBuscar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
+        btnBuscar.setBackground(new Color(32, 178, 170));
+        btnBuscar.setForeground(Color.WHITE);
+        btnBuscar.setBounds(759, 26, 162, 35);
+        panel.add(btnBuscar);
+
+        // =========================================================
+        // CABEÇALHO
+        // =========================================================
+
+        JPanel panel_1 = new JPanel();
+        panel_1.setBackground(new Color(32, 178, 170));
+        panel_1.setBounds(0, 0, 984, 92);
+        panel_1.setLayout(null);
+        getContentPane().add(panel_1);
+
+        JLabel lblNewLabel = new JLabel("CENTRAL PRODUTOS");
+        lblNewLabel.setFont(new Font("Arial Black", Font.BOLD, 30));
+        lblNewLabel.setForeground(Color.WHITE);
+        lblNewLabel.setIcon(
+                new ImageIcon(
+                        frmProduto.class.getResource("/img/PRODUTOS.png")
+                )
+        );
+        lblNewLabel.setBounds(28, 0, 518, 90);
+        panel_1.add(lblNewLabel);
+
+        JLabel lblNewLabel_1 = new JLabel("");
+        lblNewLabel_1.setIcon(
+                new ImageIcon(
+                        frmProduto.class.getResource("/img/LOGO2.png")
+                )
+        );
+        lblNewLabel_1.setBounds(804, 229, 151, 105);
+        getContentPane().add(lblNewLabel_1);
         
-                // =========================
-                // BOTÃO ADICIONAR
-                // =========================
-        
-                btnAdicionar = new JButton("ADICIONAR");
-                btnAdicionar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-                btnAdicionar.setForeground(new Color(255, 255, 255));
-                btnAdicionar.setBackground(new Color(32, 178, 170));
-                btnAdicionar.setBounds(53, 25, 162, 35);
-                panel.add(btnAdicionar);
-                
-                        // =========================
-                        // BOTÃO EDITAR
-                        // =========================
-                
-                        btnEditar = new JButton("EDITAR");
-                        btnEditar.setFont(new Font("Tahoma", Font.BOLD, 15));
-                        btnEditar.setBackground(new Color(32, 178, 170));
-                        btnEditar.setForeground(new Color(255, 255, 255));
-                        btnEditar.setBounds(229, 26, 162, 35);
-                        panel.add(btnEditar);
-                        
-                                // =========================
-                                // BOTÃO EXCLUIR
-                                // =========================
-                        
-                                btnExcluir = new JButton("EXCLUIR");
-                                btnExcluir.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-                                btnExcluir.setBackground(new Color(32, 178, 170));
-                                btnExcluir.setForeground(new Color(255, 255, 255));
-                                btnExcluir.setBounds(406, 26, 162, 35);
-                                panel.add(btnExcluir);
-                                
-                                        // =========================
-                                        // BOTÃO LIMPAR
-                                        // =========================
-                                
-                                        btnLimpar = new JButton("LIMPAR");
-                                        btnLimpar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-                                        btnLimpar.setBackground(new Color(32, 178, 170));
-                                        btnLimpar.setForeground(new Color(255, 255, 255));
-                                        btnLimpar.setBounds(583, 26, 162, 35);
-                                        panel.add(btnLimpar);
-                                        
-                                                // =========================
-                                                // BOTÃO BUSCAR
-                                                // =========================
-                                        
-                                                btnBuscar = new JButton("BUSCAR");
-                                                btnBuscar.setFont(new Font("Arial Narrow", Font.BOLD, 15));
-                                                btnBuscar.setBackground(new Color(32, 178, 170));
-                                                btnBuscar.setForeground(new Color(255, 255, 255));
-                                                btnBuscar.setBounds(759, 26, 162, 35);
-                                                panel.add(btnBuscar);
-                                                
-                                                JPanel panel_1 = new JPanel();
-                                                panel_1.setBackground(new Color(32, 178, 170));
-                                                panel_1.setBounds(0, 0, 984, 92);
-                                                getContentPane().add(panel_1);
-                                                panel_1.setLayout(null);
-                                                
-                                                JLabel lblNewLabel = new JLabel("CENTRAL PRODUTOS");
-                                                lblNewLabel.setFont(new Font("Arial Black", Font.BOLD, 30));
-                                                lblNewLabel.setForeground(new Color(255, 255, 255));
-                                                lblNewLabel.setIcon(new ImageIcon(frmProduto.class.getResource("/img/PRODUTOS.png")));
-                                                lblNewLabel.setBounds(28, 0, 518, 90);
-                                                panel_1.add(lblNewLabel);
-                                                
-                                                JLabel lblNewLabel_1 = new JLabel("");
-                                                lblNewLabel_1.setIcon(new ImageIcon(frmProduto.class.getResource("/img/LOGO2.png")));
-                                                lblNewLabel_1.setBounds(804, 229, 151, 105);
-                                                getContentPane().add(lblNewLabel_1);
-                                                
-                                                        btnBuscar.addActionListener(e -> buscarProduto());
-                                        
-                                                btnLimpar.addActionListener(e -> limparCampos());
-                                
-                                        btnExcluir.addActionListener(e -> excluirProduto());
-                        
-                                btnEditar.addActionListener(e -> editarProduto());
-                
-                        btnAdicionar.addActionListener(e -> adicionarProduto());
+        JButton btnNewButton = new JButton("New button");
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		controllerProduto.gerarRelatorioProdutos();
+        		
+        		
+        	}
+        });
+        btnNewButton.setBounds(795, 365, 89, 23);
+        getContentPane().add(btnNewButton);
+
+        // =========================================================
+        // EVENTOS DOS BOTÕES
+        // =========================================================
+
+        btnBuscar.addActionListener(e -> buscarProduto());
+
+        btnLimpar.addActionListener(e -> limparCampos());
+
+        btnExcluir.addActionListener(e -> excluirProduto());
+
+        btnEditar.addActionListener(e -> editarProduto());
+
+        btnAdicionar.addActionListener(e -> adicionarProduto());
     }
 
     // =========================================================
@@ -366,14 +402,28 @@ public class frmProduto extends JDialog {
                 return;
             }
 
+            // =====================================================
+            // CRIAR PRODUTO
+            // =====================================================
+
             Produto novoProduto = new Produto();
 
-            novoProduto.setCodigoBarras(txtBarcode.getText().trim());
-            novoProduto.setDescricao(txtDescricao.getText().trim());
-            novoProduto.setCategoria(txtCategoria.getText().trim());
+            novoProduto.setCodigoBarras(
+                    txtBarcode.getText().trim()
+            );
+
+            novoProduto.setDescricao(
+                    txtDescricao.getText().trim()
+            );
+
+            novoProduto.setCategoria(
+                    txtCategoria.getText().trim()
+            );
 
             novoProduto.setIdFornecedor(
-                    Integer.parseInt(txtIDFornecedor.getText().trim())
+                    Integer.parseInt(
+                            txtIDFornecedor.getText().trim()
+                    )
             );
 
             novoProduto.setPrecoCusto(
@@ -393,15 +443,28 @@ public class frmProduto extends JDialog {
             );
 
             novoProduto.setQuantidade(
-                    Integer.parseInt(txtQuantidade.getText().trim())
+                    Integer.parseInt(
+                            txtQuantidade.getText().trim()
+                    )
             );
 
             novoProduto.setEstoqueMinimo(
-                    Integer.parseInt(txtEstoqueMinimo.getText().trim())
+                    Integer.parseInt(
+                            txtEstoqueMinimo.getText().trim()
+                    )
             );
 
-            // Usa o controller da tela
+            // =====================================================
+            // AQUI ESTAVA O ERRO!
+            // AGORA O PRODUTO É REALMENTE ENVIADO AO BANCO
+            // =====================================================
+
             controllerProduto.Adicionar(novoProduto);
+
+            // =====================================================
+            // MENSAGEM DE SUCESSO
+            // Só chega aqui se o INSERT não gerar exceção
+            // =====================================================
 
             JOptionPane.showMessageDialog(
                     this,
@@ -415,9 +478,13 @@ public class frmProduto extends JDialog {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Verifique os campos numéricos.\n"
-                    + "Fornecedor, preços, quantidade e estoque mínimo "
-                    + "devem conter valores válidos.",
+                    "Valor numérico inválido!\n\n"
+                    + "ID Fornecedor: [" + txtIDFornecedor.getText() + "]\n"
+                    + "Preço Custo: [" + txtPrecoCusto.getText() + "]\n"
+                    + "Preço Venda: [" + txtPrecoVenda.getText() + "]\n"
+                    + "Quantidade: [" + txtQuantidade.getText() + "]\n"
+                    + "Estoque Mínimo: [" + txtEstoqueMinimo.getText() + "]\n\n"
+                    + "Erro: " + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -426,7 +493,8 @@ public class frmProduto extends JDialog {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Erro ao adicionar produto:\n" + e.getMessage(),
+                    "Erro ao adicionar produto:\n\n"
+                    + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -515,7 +583,9 @@ public class frmProduto extends JDialog {
             Produto produtoEditar = new Produto();
 
             produtoEditar.setIdProduto(
-                    Integer.parseInt(txtIDProduto.getText().trim())
+                    Integer.parseInt(
+                            txtIDProduto.getText().trim()
+                    )
             );
 
             produtoEditar.setCodigoBarras(
@@ -589,7 +659,8 @@ public class frmProduto extends JDialog {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Erro ao editar produto:\n" + e.getMessage(),
+                    "Erro ao editar produto:\n"
+                    + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -627,12 +698,25 @@ public class frmProduto extends JDialog {
                     txtIDProduto.getText().trim()
             );
 
-            controllerProduto.Excluir(idProduto);
+            boolean excluido =
+                    controllerProduto.Excluir(idProduto);
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Produto excluído com sucesso!"
-            );
+            if (excluido) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Produto excluído com sucesso!"
+                );
+
+            } else {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Nenhum produto foi excluído.",
+                        "Aviso",
+                        JOptionPane.WARNING_MESSAGE
+                );
+            }
 
             limparCampos();
             carregarProduto();
@@ -650,7 +734,8 @@ public class frmProduto extends JDialog {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Erro ao excluir produto:\n" + e.getMessage(),
+                    "Erro ao excluir produto:\n"
+                    + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -660,13 +745,13 @@ public class frmProduto extends JDialog {
     // =========================================================
     // BUSCAR PRODUTO
     // =========================================================
-    
 
     private void buscarProduto() {
 
         try {
 
-            String descricao = txtDescricao.getText().trim();
+            String descricao =
+                    txtDescricao.getText().trim();
 
             if (descricao.isEmpty()) {
 
@@ -698,7 +783,8 @@ public class frmProduto extends JDialog {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Erro ao buscar produto:\n" + e.getMessage(),
+                    "Erro ao buscar produto:\n"
+                    + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -715,8 +801,6 @@ public class frmProduto extends JDialog {
 
             cboProduto.removeAllItems();
 
-            // CORREÇÃO:
-            // listaproduto() é método de instância
             ArrayList<Produto> lista =
                     controllerProduto.listaproduto();
 
@@ -738,7 +822,8 @@ public class frmProduto extends JDialog {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Erro ao carregar produtos:\n" + e.getMessage(),
+                    "Erro ao carregar produtos:\n"
+                    + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -746,7 +831,7 @@ public class frmProduto extends JDialog {
     }
 
     // =========================================================
-    // SELECIONAR PRODUTO NO COMBO
+    // SELECIONAR PRODUTO
     // =========================================================
 
     private void selecionarProduto() {
@@ -764,17 +849,18 @@ public class frmProduto extends JDialog {
                 return;
             }
 
-            String[] partes = item.split(" - ", 2);
+            String[] partes =
+                    item.split(" - ", 2);
 
             if (partes.length == 0) {
                 return;
             }
 
             int idProduto =
-                    Integer.parseInt(partes[0].trim());
+                    Integer.parseInt(
+                            partes[0].trim()
+                    );
 
-            // CORREÇÃO:
-            // listaproduto() é método de instância
             ArrayList<Produto> lista =
                     controllerProduto.listaproduto();
 
@@ -804,7 +890,8 @@ public class frmProduto extends JDialog {
 
             JOptionPane.showMessageDialog(
                     this,
-                    "Erro ao selecionar produto:\n" + e.getMessage(),
+                    "Erro ao selecionar produto:\n"
+                    + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -822,7 +909,9 @@ public class frmProduto extends JDialog {
         }
 
         txtIDProduto.setText(
-                String.valueOf(produto.getIdProduto())
+                String.valueOf(
+                        produto.getIdProduto()
+                )
         );
 
         txtDescricao.setText(
@@ -834,23 +923,33 @@ public class frmProduto extends JDialog {
         );
 
         txtIDFornecedor.setText(
-                String.valueOf(produto.getIdFornecedor())
+                String.valueOf(
+                        produto.getIdFornecedor()
+                )
         );
 
         txtPrecoCusto.setText(
-                String.valueOf(produto.getPrecoCusto())
+                String.valueOf(
+                        produto.getPrecoCusto()
+                )
         );
 
         txtPrecoVenda.setText(
-                String.valueOf(produto.getPrecoVenda())
+                String.valueOf(
+                        produto.getPrecoVenda()
+                )
         );
 
         txtQuantidade.setText(
-                String.valueOf(produto.getQuantidade())
+                String.valueOf(
+                        produto.getQuantidade()
+                )
         );
 
         txtEstoqueMinimo.setText(
-                String.valueOf(produto.getEstoqueMinimo())
+                String.valueOf(
+                        produto.getEstoqueMinimo()
+                )
         );
 
         txtBarcode.setText(

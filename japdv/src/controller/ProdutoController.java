@@ -1,15 +1,31 @@
 package controller;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+ 
+import javax.swing.JOptionPane;
+ 
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+ 
+
 
 import database.Database;
-import model.Fornecedor;
 import model.Produto;
-
 public class ProdutoController {
 
     private Database database;
@@ -18,341 +34,285 @@ public class ProdutoController {
         database = new Database();
     }
 
-    // =====================================================
+    // =========================
     // ADICIONAR PRODUTO
-    // =====================================================
+    // =========================
+    public boolean Adicionar(Produto produto) throws Exception {
 
-    public boolean Adicionar(Produto produto) {
+        String sql = """
+            INSERT INTO produtos
+            (codigoBarras, descricao, categoria, precoCusto,
+             precoVenda, quantidade, estoqueMinimo, idFornecedor)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
-        try {
+        Connection con = database.conectar();
 
-            String sql = """
-                INSERT INTO produto
-                (descricao, categoria, idFornecedor, precoCusto, precoVenda, quantidade, estoqueMinimo)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """;
-
-            Connection con = database.conectar();
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            stmt.setString(1, produto.getDescricao());
-            stmt.setString(2, produto.getCategoria());
-            stmt.setInt(3, produto.getIdFornecedor());
-            stmt.setDouble(4, produto.getPrecoCusto());
-            stmt.setDouble(5, produto.getPrecoVenda());
-            stmt.setInt(6, produto.getQuantidade());
-            stmt.setInt(7, produto.getEstoqueMinimo());
-
-            int linhasAfetadas = stmt.executeUpdate();
-
-            stmt.close();
-            con.close();
-
-            return linhasAfetadas > 0;
-
-        } catch (Exception e) {
-
-            System.out.println("Erro ao adicionar produto:");
-            e.printStackTrace();
-
-            return false;
+        if (con == null) {
+            throw new Exception("Não foi possível conectar ao banco de dados.");
         }
+
+        System.out.println("=================================");
+        System.out.println("CONEXÃO REALIZADA");
+        System.out.println("Banco: " + con.getCatalog());
+        System.out.println("URL: " + con.getMetaData().getURL());
+        System.out.println("AutoCommit: " + con.getAutoCommit());
+        System.out.println("=================================");
+
+        PreparedStatement stmt = con.prepareStatement(
+            sql,
+            java.sql.Statement.RETURN_GENERATED_KEYS
+        );
+
+        stmt.setString(1, produto.getCodigoBarras());
+        stmt.setString(2, produto.getDescricao());
+        stmt.setString(3, produto.getCategoria());
+        stmt.setDouble(4, produto.getPrecoCusto());
+        stmt.setDouble(5, produto.getPrecoVenda());
+        stmt.setInt(6, produto.getQuantidade());
+        stmt.setInt(7, produto.getEstoqueMinimo());
+        stmt.setInt(8, produto.getIdFornecedor());
+
+        System.out.println("Tentando inserir:");
+        System.out.println("Descrição: " + produto.getDescricao());
+        System.out.println("Categoria: " + produto.getCategoria());
+        System.out.println("ID Fornecedor: " + produto.getIdFornecedor());
+
+        int resultado = stmt.executeUpdate();
+
+        System.out.println("=================================");
+        System.out.println("RESULTADO DO INSERT: " + resultado);
+        System.out.println("=================================");
+
+        if (resultado == 0) {
+            throw new Exception("O INSERT não inseriu nenhuma linha.");
+        }
+
+        ResultSet rs = stmt.getGeneratedKeys();
+
+        if (rs.next()) {
+            System.out.println("ID GERADO: " + rs.getInt(1));
+        }
+
+        rs.close();
+        stmt.close();
+        con.close();
+
+        System.out.println("PRODUTO INSERIDO COM SUCESSO!");
+
+        return resultado > 0;
+    }
+    // =========================
+    // EDITAR PRODUTO
+    // =========================
+    public void Editar(Produto produto) throws Exception {
+
+        String sql = """
+            UPDATE produtos
+            SET codigoBarras = ?,
+                descricao = ?,
+                categoria = ?,
+                precoCusto = ?,
+                precoVenda = ?,
+                quantidade = ?,
+                estoqueMinimo = ?,
+                idFornecedor = ?
+            WHERE idProdutos = ?
+        """;
+
+        Connection con = database.conectar();
+        PreparedStatement stmt = con.prepareStatement(sql);
+
+        stmt.setString(1, produto.getCodigoBarras());
+        stmt.setString(2, produto.getDescricao());
+        stmt.setString(3, produto.getCategoria());
+        stmt.setDouble(4, produto.getPrecoCusto());
+        stmt.setDouble(5, produto.getPrecoVenda());
+        stmt.setInt(6, produto.getQuantidade());
+        stmt.setInt(7, produto.getEstoqueMinimo());
+        stmt.setInt(8, produto.getIdFornecedor());
+        stmt.setInt(9, produto.getIdProduto());
+
+        stmt.executeUpdate();
+
+        stmt.close();
+        con.close();
     }
 
-    // =====================================================
-    // BUSCAR PRODUTO PELA DESCRIÇÃO
-    // =====================================================
+    // =========================
+    // EXCLUIR PRODUTO
+    // =========================
+    public boolean Excluir(int idProduto) throws Exception {
 
-    public Produto buscar(String descricao) {
+        String sql = """
+            DELETE FROM produtos
+            WHERE idProdutos = ?
+        """;
+
+        Connection con = database.conectar();
+        PreparedStatement stmt = con.prepareStatement(sql);
+
+        stmt.setInt(1, idProduto);
+
+        int linhasAfetadas = stmt.executeUpdate();
+
+        stmt.close();
+        con.close();
+
+        return linhasAfetadas > 0;
+    }
+
+    // =========================
+    // BUSCAR PRODUTO
+    // =========================
+    public Produto buscar(String descricao) throws Exception {
+
+        String sql = """
+            SELECT
+                idProdutos,
+                codigoBarras,
+                descricao,
+                categoria,
+                precoCusto,
+                precoVenda,
+                quantidade,
+                estoqueMinimo,
+                idFornecedor
+            FROM produtos
+            WHERE descricao LIKE ?
+            LIMIT 1
+        """;
+
+        Connection con = database.conectar();
+        PreparedStatement stmt = con.prepareStatement(sql);
+
+        stmt.setString(1, "%" + descricao + "%");
+
+        ResultSet rs = stmt.executeQuery();
 
         Produto produto = null;
 
-        try {
+        if (rs.next()) {
 
-            String sql = """
-                SELECT idProdutos,
-                       descricao,
-                       categoria,
-                       idFornecedor,
-                       precoCusto,
-                       precoVenda,
-                       quantidade,
-                       estoqueMinimo
-                FROM produto
-                WHERE descricao LIKE ?
-                ORDER BY descricao
-            """;
+            produto = new Produto();
 
-            Connection con = database.conectar();
+            produto.setIdProduto(
+                rs.getInt("idProdutos")
+            );
 
-            PreparedStatement stmt = con.prepareStatement(sql);
+            produto.setCodigoBarras(
+                rs.getString("codigoBarras")
+            );
 
-            stmt.setString(1, "%" + descricao + "%");
+            produto.setDescricao(
+                rs.getString("descricao")
+            );
 
-            ResultSet rs = stmt.executeQuery();
+            produto.setCategoria(
+                rs.getString("categoria")
+            );
 
-            if (rs.next()) {
+            produto.setPrecoCusto(
+                rs.getDouble("precoCusto")
+            );
 
-                produto = new Produto();
+            produto.setPrecoVenda(
+                rs.getDouble("precoVenda")
+            );
 
-                produto.setIdProduto(
-                        rs.getInt("idProdutos")
-                );
+            produto.setQuantidade(
+                rs.getInt("quantidade")
+            );
 
-                produto.setDescricao(
-                        rs.getString("descricao")
-                );
+            produto.setEstoqueMinimo(
+                rs.getInt("estoqueMinimo")
+            );
 
-                produto.setCategoria(
-                        rs.getString("categoria")
-                );
-
-                produto.setIdFornecedor(
-                        rs.getInt("idFornecedor")
-                );
-
-                produto.setPrecoCusto(
-                        rs.getDouble("precoCusto")
-                );
-
-                produto.setPrecoVenda(
-                        rs.getDouble("precoVenda")
-                );
-
-                produto.setQuantidade(
-                        rs.getInt("quantidade")
-                );
-
-                produto.setEstoqueMinimo(
-                        rs.getInt("estoqueMinimo")
-                );
-            }
-
-            rs.close();
-            stmt.close();
-            con.close();
-
-        } catch (Exception e) {
-
-            System.out.println("Erro ao buscar produto:");
-            e.printStackTrace();
+            produto.setIdFornecedor(
+                rs.getInt("idFornecedor")
+            );
         }
+
+        rs.close();
+        stmt.close();
+        con.close();
 
         return produto;
     }
 
-    // =====================================================
-    // LISTAR TODOS OS PRODUTOS
-    // =====================================================
-
-    public ArrayList<Produto> listaproduto() {
+    // =========================
+    // LISTAR PRODUTOS
+    // =========================
+    public ArrayList<Produto> listaproduto() throws Exception {
 
         ArrayList<Produto> lista = new ArrayList<>();
 
-        try {
+        String sql = """
+            SELECT
+                idProdutos,
+                codigoBarras,
+                descricao,
+                categoria,
+                precoCusto,
+                precoVenda,
+                quantidade,
+                estoqueMinimo,
+                idFornecedor
+            FROM produtos
+            ORDER BY descricao
+        """;
 
-            String sql = """
-                SELECT idProdutos,
-                       descricao,
-                       categoria,
-                       idFornecedor,
-                       precoCusto,
-                       precoVenda,
-                       quantidade,
-                       estoqueMinimo
-                FROM produto
-                ORDER BY descricao
-            """;
+        Connection con = database.conectar();
+        PreparedStatement stmt = con.prepareStatement(sql);
 
-            Connection con = database.conectar();
+        ResultSet rs = stmt.executeQuery();
 
-            PreparedStatement stmt = con.prepareStatement(sql);
+        while (rs.next()) {
 
-            ResultSet rs = stmt.executeQuery();
+            Produto produto = new Produto();
 
-            while (rs.next()) {
+            produto.setIdProduto(
+                rs.getInt("idProdutos")
+            );
 
-                Produto produto = new Produto();
+            produto.setCodigoBarras(
+                rs.getString("codigoBarras")
+            );
 
-                produto.setIdProduto(
-                        rs.getInt("idProdutos")
-                );
+            produto.setDescricao(
+                rs.getString("descricao")
+            );
 
-                produto.setDescricao(
-                        rs.getString("descricao")
-                );
+            produto.setCategoria(
+                rs.getString("categoria")
+            );
 
-                produto.setCategoria(
-                        rs.getString("categoria")
-                );
+            produto.setPrecoCusto(
+                rs.getDouble("precoCusto")
+            );
 
-                produto.setIdFornecedor(
-                        rs.getInt("idFornecedor")
-                );
+            produto.setPrecoVenda(
+                rs.getDouble("precoVenda")
+            );
 
-                produto.setPrecoCusto(
-                        rs.getDouble("precoCusto")
-                );
+            produto.setQuantidade(
+                rs.getInt("quantidade")
+            );
 
-                produto.setPrecoVenda(
-                        rs.getDouble("precoVenda")
-                );
+            produto.setEstoqueMinimo(
+                rs.getInt("estoqueMinimo")
+            );
 
-                produto.setQuantidade(
-                        rs.getInt("quantidade")
-                );
+            produto.setIdFornecedor(
+                rs.getInt("idFornecedor")
+            );
 
-                produto.setEstoqueMinimo(
-                        rs.getInt("estoqueMinimo")
-                );
-
-                lista.add(produto);
-            }
-
-            rs.close();
-            stmt.close();
-            con.close();
-
-        } catch (Exception e) {
-
-            System.out.println("Erro ao listar produtos:");
-            e.printStackTrace();
+            lista.add(produto);
         }
 
-        return lista;
-    }
-
-    // =====================================================
-    // EDITAR PRODUTO
-    // =====================================================
-
-    public boolean Editar(Produto produto) {
-
-        try {
-
-            String sql = """
-                UPDATE produto
-                SET descricao = ?,
-                    categoria = ?,
-                    idFornecedor = ?,
-                    precoCusto = ?,
-                    precoVenda = ?,
-                    quantidade = ?,
-                    estoqueMinimo = ?
-                WHERE idProdutos = ?
-            """;
-
-            Connection con = database.conectar();
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            stmt.setString(1, produto.getDescricao());
-            stmt.setString(2, produto.getCategoria());
-            stmt.setInt(3, produto.getIdFornecedor());
-            stmt.setDouble(4, produto.getPrecoCusto());
-            stmt.setDouble(5, produto.getPrecoVenda());
-            stmt.setInt(6, produto.getQuantidade());
-            stmt.setInt(7, produto.getEstoqueMinimo());
-            stmt.setInt(8, produto.getIdProduto());
-
-            int linhasAfetadas = stmt.executeUpdate();
-
-            stmt.close();
-            con.close();
-
-            return linhasAfetadas > 0;
-
-        } catch (Exception e) {
-
-            System.out.println("Erro ao editar produto:");
-            e.printStackTrace();
-
-            return false;
-        }
-    }
-
-    // =====================================================
-    // EXCLUIR PRODUTO
-    // =====================================================
-
-    public boolean Excluir(int idProduto) {
-
-        try {
-
-            String sql = """
-                DELETE FROM produto
-                WHERE idProdutos = ?
-            """;
-
-            Connection con = database.conectar();
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            stmt.setInt(1, idProduto);
-
-            int linhasAfetadas = stmt.executeUpdate();
-
-            stmt.close();
-            con.close();
-
-            return linhasAfetadas > 0;
-
-        } catch (Exception e) {
-
-            System.out.println("Erro ao excluir produto:");
-            e.printStackTrace();
-
-            return false;
-        }
-    }
-
-    // =====================================================
-    // LISTAR FORNECEDORES
-    // =====================================================
-
-    public ArrayList<Fornecedor> listaFornecedores() {
-
-        ArrayList<Fornecedor> lista = new ArrayList<>();
-
-        try {
-
-            String sql = """
-                SELECT idFornecedor, nome
-                FROM fornecedores
-                ORDER BY nome
-            """;
-
-            Connection con = database.conectar();
-
-            PreparedStatement stmt = con.prepareStatement(sql);
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-
-                Fornecedor fornecedor = new Fornecedor();
-
-                fornecedor.setIdFornecedor(
-                        rs.getInt("idFornecedor")
-                );
-
-                fornecedor.setNome(
-                        rs.getString("nome")
-                );
-
-                lista.add(fornecedor);
-            }
-
-            rs.close();
-            stmt.close();
-            con.close();
-
-        } catch (Exception e) {
-
-            System.out.println("Erro ao listar fornecedores:");
-            e.printStackTrace();
-        }
+        rs.close();
+        stmt.close();
+        con.close();
 
         return lista;
     }
