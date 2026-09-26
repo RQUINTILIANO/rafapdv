@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,9 +23,12 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import controller.ProdutoController;
 //importar a classe Database do pacote database
 import database.Database;
-import model.Cliente;
+import javax.swing.border.LineBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
 
 public class Main extends JFrame {
 
@@ -38,7 +40,16 @@ public class Main extends JFrame {
 	Database db = new Database();
 	private JLabel lblStatus;
 	private JLabel lblMysql;
+	private JLabel lblDashQuantidade;
 	
+	//Criação de um objeto para acessar o controller e atualizar o dashboard
+	ProdutoController controllerProduto = new ProdutoController();
+	private JLabel lblDashRepor;
+	private JPanel panelCard5_1_1_2;
+	private JPanel panelCard5_1_1_1_1;
+	private JLabel lblEstoqueZero;
+	private JLabel lblVendasDia;
+	 
 	/**
 	 * Launch the application.
 	 */
@@ -110,7 +121,8 @@ public class Main extends JFrame {
 		        frmProduto produto = new frmProduto(Main.this, true);
 		        produto.setLocationRelativeTo(Main.this);
 		        produto.setVisible(true);
-
+                //Atualizar o dashboard depois quea janela produtos for fechada(JDialog - quando ativamos um modal (modal true) o Java "espera" o fechamento da janela para encerrar o processamento-
+		        atualizarDashboard();
 		    }
 		});
 		btnProdutos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -248,10 +260,41 @@ public class Main extends JFrame {
 		contentPane.add(lblDashboard);
 
 		JPanel panelCard5 = new JPanel();
+		panelCard5.setBorder(new LineBorder(new Color(32, 178, 170), 2, true));
+		panelCard5.setForeground(Color.WHITE);
 		panelCard5.setLayout(null);
-		panelCard5.setBackground(SystemColor.window);
+		panelCard5.setBackground(Color.WHITE);
 		panelCard5.setBounds(283, 149, 217, 160);
 		contentPane.add(panelCard5);
+		
+		lblDashQuantidade = new JLabel("0");
+		lblDashQuantidade.setFont(new Font("Arial Narrow", Font.BOLD, 50));
+		lblDashQuantidade.setForeground(new Color(128, 128, 128));
+		lblDashQuantidade.setBounds(89, 94, 103, 43);
+		panelCard5.add(lblDashQuantidade);
+		
+		panelCard5_1_1_2 = new JPanel();
+		panelCard5_1_1_2.setLayout(null);
+		panelCard5_1_1_2.setBackground(new Color(32, 178, 170));
+		panelCard5_1_1_2.setBounds(0, 0, 217, 83);
+		panelCard5.add(panelCard5_1_1_2);
+		
+		JLabel lblNewLabel_2 = new JLabel("PRODUTOS");
+		lblNewLabel_2.setBounds(88, 11, 184, 36);
+		panelCard5_1_1_2.add(lblNewLabel_2);
+		lblNewLabel_2.setFont(new Font("Arial Narrow", Font.BOLD, 22));
+		lblNewLabel_2.setForeground(new Color(255, 255, 255));
+		
+		JLabel lblNewLabel_6 = new JLabel(" CADASTRADOS");
+		lblNewLabel_6.setBounds(85, 43, 122, 14);
+		panelCard5_1_1_2.add(lblNewLabel_6);
+		lblNewLabel_6.setFont(new Font("Arial Narrow", Font.PLAIN, 17));
+		lblNewLabel_6.setForeground(new Color(255, 255, 255));
+		
+		JLabel lblNewLabel_4 = new JLabel("");
+		lblNewLabel_4.setBounds(10, 0, 72, 83);
+		panelCard5_1_1_2.add(lblNewLabel_4);
+		lblNewLabel_4.setIcon(new ImageIcon(Main.class.getResource("/img/QuantidadeProdutos.png")));
 
 		JLabel lblCalendario = new JLabel("");
 		lblCalendario.setIcon(new ImageIcon(Main.class.getResource("/img/CALENDARIO1.png")));
@@ -285,39 +328,191 @@ public class Main extends JFrame {
 		contentPane.add(lblStatus);
 		
 		JPanel panelCard5_1 = new JPanel();
+		panelCard5_1.setBorder(new LineBorder(new Color(255, 204, 0), 2, true));
 		panelCard5_1.setBounds(510, 149, 217, 160);
 		contentPane.add(panelCard5_1);
 		panelCard5_1.setLayout(null);
 		panelCard5_1.setBackground(SystemColor.window);
 		
+		lblDashRepor = new JLabel("2");
+		lblDashRepor.setForeground(new Color(128, 128, 128));
+		lblDashRepor.setFont(new Font("Arial Narrow", Font.BOLD, 50));
+		lblDashRepor.setBounds(84, 95, 100, 43);
+		panelCard5_1.add(lblDashRepor);
+		
+		panelCard5_1_1_1_1 = new JPanel();
+		panelCard5_1_1_1_1.setLayout(null);
+		panelCard5_1_1_1_1.setBackground(new Color(255, 204, 0));
+		panelCard5_1_1_1_1.setBounds(0, 0, 217, 84);
+		panelCard5_1.add(panelCard5_1_1_1_1);
+		
+		JLabel lblNewLabel_5 = new JLabel("New label");
+		lblNewLabel_5.setBounds(10, 0, 76, 84);
+		panelCard5_1_1_1_1.add(lblNewLabel_5);
+		lblNewLabel_5.setIcon(new ImageIcon(Main.class.getResource("/img/ALERTA.png")));
+		
+		JLabel lblNewLabel_2_2 = new JLabel("ESTOQUE");
+		lblNewLabel_2_2.setForeground(Color.WHITE);
+		lblNewLabel_2_2.setFont(new Font("Arial Narrow", Font.BOLD, 22));
+		lblNewLabel_2_2.setBounds(86, 11, 184, 36);
+		panelCard5_1_1_1_1.add(lblNewLabel_2_2);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("BAIXO");
+		lblNewLabel_2_1.setBounds(86, 39, 148, 20);
+		panelCard5_1_1_1_1.add(lblNewLabel_2_1);
+		lblNewLabel_2_1.setForeground(new Color(255, 255, 255));
+		lblNewLabel_2_1.setFont(new Font("Arial Narrow", Font.PLAIN, 17));
+		
 		JPanel panelCard5_1_1 = new JPanel();
+		panelCard5_1_1.setBorder(new LineBorder(new Color(178, 34, 34), 2, true));
+		panelCard5_1_1.setForeground(new Color(178, 34, 34));
 		panelCard5_1_1.setLayout(null);
 		panelCard5_1_1.setBackground(SystemColor.window);
 		panelCard5_1_1.setBounds(737, 149, 217, 160);
 		contentPane.add(panelCard5_1_1);
 		
+		JPanel panelCard5_1_1_3 = new JPanel();
+		panelCard5_1_1_3.setLayout(null);
+		panelCard5_1_1_3.setBackground(new Color(178, 34, 34));
+		panelCard5_1_1_3.setBounds(0, 0, 217, 83);
+		panelCard5_1_1.add(panelCard5_1_1_3);
+		
+		JLabel lblNewLabel_3 = new JLabel("");
+		lblNewLabel_3.setIcon(new ImageIcon(Main.class.getResource("/img/SemEstoque.png")));
+		lblNewLabel_3.setBounds(10, 0, 72, 83);
+		panelCard5_1_1_3.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_2_2_1 = new JLabel("ESTOQUE");
+		lblNewLabel_2_2_1.setForeground(Color.WHITE);
+		lblNewLabel_2_2_1.setFont(new Font("Arial Narrow", Font.BOLD, 22));
+		lblNewLabel_2_2_1.setBounds(88, 11, 184, 36);
+		panelCard5_1_1_3.add(lblNewLabel_2_2_1);
+		
+		JLabel lblEstoqueZerado = new JLabel("ZERADO");
+		lblEstoqueZerado.setForeground(Color.WHITE);
+		lblEstoqueZerado.setFont(new Font("Arial Narrow", Font.PLAIN, 17));
+		lblEstoqueZerado.setBounds(88, 40, 148, 20);
+		panelCard5_1_1_3.add(lblEstoqueZerado);
+		
+		lblEstoqueZero = new JLabel("0");
+		lblEstoqueZero.setForeground(Color.GRAY);
+		lblEstoqueZero.setFont(new Font("Arial Narrow", Font.BOLD, 50));
+		lblEstoqueZero.setBounds(93, 94, 103, 43);
+		panelCard5_1_1.add(lblEstoqueZero);
+		
 		JPanel panelCard5_1_1_1 = new JPanel();
+		panelCard5_1_1_1.setBorder(new LineBorder(new Color(32, 178, 170), 2, true));
 		panelCard5_1_1_1.setLayout(null);
 		panelCard5_1_1_1.setBackground(SystemColor.window);
-		panelCard5_1_1_1.setBounds(737, 320, 217, 160);
+		panelCard5_1_1_1.setBounds(510, 320, 217, 160);
 		contentPane.add(panelCard5_1_1_1);
 		
-		JPanel panelCard5_1_2 = new JPanel();
-		panelCard5_1_2.setLayout(null);
-		panelCard5_1_2.setBackground(SystemColor.window);
-		panelCard5_1_2.setBounds(510, 320, 217, 160);
-		contentPane.add(panelCard5_1_2);
+		JPanel panelCard5_1_1_1_2 = new JPanel();
+		panelCard5_1_1_1_2.setLayout(null);
+		panelCard5_1_1_1_2.setBackground(new Color(32, 178, 170));
+		panelCard5_1_1_1_2.setBounds(0, 0, 217, 82);
+		panelCard5_1_1_1.add(panelCard5_1_1_1_2);
 		
-		JPanel panelCard5_2 = new JPanel();
-		panelCard5_2.setLayout(null);
-		panelCard5_2.setBackground(SystemColor.window);
-		panelCard5_2.setBounds(283, 320, 217, 160);
-		contentPane.add(panelCard5_2);
+		JLabel lblNewLabel_2_2_1_1_1 = new JLabel("ITENS ");
+		lblNewLabel_2_2_1_1_1.setForeground(Color.WHITE);
+		lblNewLabel_2_2_1_1_1.setFont(new Font("Arial Narrow", Font.BOLD, 22));
+		lblNewLabel_2_2_1_1_1.setBounds(87, 11, 184, 36);
+		panelCard5_1_1_1_2.add(lblNewLabel_2_2_1_1_1);
+		
+		JLabel lblNewLabel_2_1_1_1_1 = new JLabel("VENDIDOS HOJE");
+		lblNewLabel_2_1_1_1_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1_1_1_1.setFont(new Font("Arial Narrow", Font.PLAIN, 17));
+		lblNewLabel_2_1_1_1_1.setBounds(87, 39, 148, 20);
+		panelCard5_1_1_1_2.add(lblNewLabel_2_1_1_1_1);
+		
+		JLabel lblNewLabel_7 = new JLabel("");
+		lblNewLabel_7.setIcon(new ImageIcon(Main.class.getResource("/img/ItensVendidosHoje.png")));
+		lblNewLabel_7.setBounds(10, 0, 77, 82);
+		panelCard5_1_1_1_2.add(lblNewLabel_7);
+		
+		JLabel lblItensVendidos = new JLabel("2");
+		lblItensVendidos.setForeground(Color.GRAY);
+		lblItensVendidos.setFont(new Font("Arial Narrow", Font.BOLD, 50));
+		lblItensVendidos.setBounds(88, 93, 103, 43);
+		panelCard5_1_1_1.add(lblItensVendidos);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(Main.class.getResource("/img/DASHBOARD.png")));
 		lblNewLabel_1.setBounds(283, 76, 64, 49);
 		contentPane.add(lblNewLabel_1);
+		
+		JPanel panelCard5_1_1_4 = new JPanel();
+		panelCard5_1_1_4.setLayout(null);
+		panelCard5_1_1_4.setForeground(new Color(32, 178, 170));
+		panelCard5_1_1_4.setBorder(new LineBorder(new Color(32, 178, 170), 2, true));
+		panelCard5_1_1_4.setBackground(SystemColor.window);
+		panelCard5_1_1_4.setBounds(283, 320, 217, 160);
+		contentPane.add(panelCard5_1_1_4);
+		
+		JPanel panelCard5_1_1_3_1 = new JPanel();
+		panelCard5_1_1_3_1.setLayout(null);
+		panelCard5_1_1_3_1.setBackground(new Color(32, 178, 170));
+		panelCard5_1_1_3_1.setBounds(0, 0, 217, 83);
+		panelCard5_1_1_4.add(panelCard5_1_1_3_1);
+		
+		JLabel lblNewLabel_3_1 = new JLabel("");
+		lblNewLabel_3_1.setIcon(new ImageIcon(Main.class.getResource("/img/VendasHoje.png")));
+		lblNewLabel_3_1.setBounds(10, 0, 72, 83);
+		panelCard5_1_1_3_1.add(lblNewLabel_3_1);
+		
+		JLabel lblNewLabel_2_2_1_1 = new JLabel("VENDAS");
+		lblNewLabel_2_2_1_1.setForeground(Color.WHITE);
+		lblNewLabel_2_2_1_1.setFont(new Font("Arial Narrow", Font.BOLD, 22));
+		lblNewLabel_2_2_1_1.setBounds(88, 11, 184, 36);
+		panelCard5_1_1_3_1.add(lblNewLabel_2_2_1_1);
+		
+		JLabel lblNewLabel_2_1_1_1 = new JLabel("HOJE");
+		lblNewLabel_2_1_1_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1_1_1.setFont(new Font("Arial Narrow", Font.PLAIN, 17));
+		lblNewLabel_2_1_1_1.setBounds(88, 40, 148, 20);
+		panelCard5_1_1_3_1.add(lblNewLabel_2_1_1_1);
+		
+		lblVendasDia = new JLabel("0");
+		lblVendasDia.setForeground(Color.GRAY);
+		lblVendasDia.setFont(new Font("Arial Narrow", Font.BOLD, 50));
+		lblVendasDia.setBounds(87, 94, 103, 43);
+		panelCard5_1_1_4.add(lblVendasDia);
+		
+		JPanel panelCard5_1_1_1_3 = new JPanel();
+		panelCard5_1_1_1_3.setLayout(null);
+		panelCard5_1_1_1_3.setBorder(new LineBorder(new Color(32, 178, 170), 2, true));
+		panelCard5_1_1_1_3.setBackground(SystemColor.window);
+		panelCard5_1_1_1_3.setBounds(737, 320, 217, 160);
+		contentPane.add(panelCard5_1_1_1_3);
+		
+		JPanel panelCard5_1_1_1_2_1 = new JPanel();
+		panelCard5_1_1_1_2_1.setLayout(null);
+		panelCard5_1_1_1_2_1.setBackground(new Color(32, 178, 170));
+		panelCard5_1_1_1_2_1.setBounds(0, 0, 217, 82);
+		panelCard5_1_1_1_3.add(panelCard5_1_1_1_2_1);
+		
+		JLabel lblNewLabel_2_2_1_1_1_1 = new JLabel("FATURAMENTO");
+		lblNewLabel_2_2_1_1_1_1.setForeground(Color.WHITE);
+		lblNewLabel_2_2_1_1_1_1.setFont(new Font("Arial Narrow", Font.BOLD, 22));
+		lblNewLabel_2_2_1_1_1_1.setBounds(70, 11, 184, 36);
+		panelCard5_1_1_1_2_1.add(lblNewLabel_2_2_1_1_1_1);
+		
+		JLabel lblNewLabel_2_1_1_1_1_1 = new JLabel("HOJE");
+		lblNewLabel_2_1_1_1_1_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1_1_1_1_1.setFont(new Font("Arial Narrow", Font.PLAIN, 17));
+		lblNewLabel_2_1_1_1_1_1.setBounds(70, 39, 148, 20);
+		panelCard5_1_1_1_2_1.add(lblNewLabel_2_1_1_1_1_1);
+		
+		JLabel lblNewLabel_7_1 = new JLabel("");
+		lblNewLabel_7_1.setIcon(new ImageIcon(Main.class.getResource("/img/FaturamentoDia.png")));
+		lblNewLabel_7_1.setBounds(0, 0, 77, 82);
+		panelCard5_1_1_1_2_1.add(lblNewLabel_7_1);
+		
+		JLabel lblFaturamento = new JLabel("2");
+		lblFaturamento.setForeground(Color.GRAY);
+		lblFaturamento.setFont(new Font("Arial Narrow", Font.BOLD, 50));
+		lblFaturamento.setBounds(93, 93, 103, 43);
+		panelCard5_1_1_1_3.add(lblFaturamento);
 
 		// iniciar centralizado
 		setLocationRelativeTo(null);
@@ -335,16 +530,40 @@ public class Main extends JFrame {
 			lblMysql.setText("MySQL Desconectado");
 			lblStatus.setForeground(Color.RED);
 		}
-
-	}// FIM do construtor
+		
+		//Atualizar o dashboard
+        atualizarDashboard();
+        
+		
+	}   // FIM do construtor
 	
-	// Função (método) para atualizar a data do sistema
-	private void atualizarData() {
+	    // Função (método) para atualizar a data do sistema
+	    private void atualizarData() {
 		// obter a data do sistema operacional
 		LocalDate hoje = LocalDate.now();
 		// formatar a data dia/mês/ano(4 dígitos)
 		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		// alterar o texto de lblData
 		lblData.setText(hoje.format(formato));
+	}
+	
+	   //Metodo(Função) para atualizar o dashboard
+	    //Card quantidade de produtos
+	    private void atualizarDashboard() {
+		int totalProdutos = controllerProduto.contarProdutos();
+		lblDashQuantidade.setText(String.valueOf(totalProdutos));
+		
+		//Card produtos com estoque baixo
+		int estoqueBaixo = controllerProduto.contarEstoqueBaixo();
+		lblDashRepor.setText(String.valueOf(estoqueBaixo));
+		
+		//card estoque zerado
+		int estoqueZero = controllerProduto.contarEstoqueBaixo();
+		lblEstoqueZero.setText(String.valueOf(estoqueZero));
+		
+		//Card Vendas do dia
+		int vendasDia = controllerProduto.VendasDia();
+		lblVendasDia.setText(String.valueOf(vendasDia));
+		
 	}
 }// FIM da classe Main (principal)

@@ -308,7 +308,7 @@ public class frmProduto extends JDialog {
         btnNewButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		controllerProduto.gerarRelatorioProdutos();
+        		//controllerProduto.gerarRelatorioProdutos();
         		
         		
         	}
